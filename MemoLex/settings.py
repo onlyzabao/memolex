@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'MemoLex.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dictionary',
+        'NAME': 'memolex',
         'HOST': 'localhost',
         'USER': 'root',
         'PASSWORD': '21020751',
