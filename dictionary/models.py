@@ -25,14 +25,14 @@ class Meaning(models.Model):
     CONJ = '7'
     INTERJ = '8'
     PART_OF_SPEECH_CHOICES = [
-        (N, 'Noun'),
-        (V, 'Verb'),
-        (ADJ, 'Adjective'),
-        (ADV, 'Adverb'),
-        (PRON, 'Pronoun'),
-        (PREP, 'Preposition'),
-        (CONJ, 'Conjunction'),
-        (INTERJ, 'Interjection'),
+        (N, 'Danh từ'),
+        (V, 'Động từ'),
+        (ADJ, 'Tính từ'),
+        (ADV, 'Trạng từ'),
+        (PRON, 'Đại từ'),
+        (PREP, 'Giới từ'),
+        (CONJ, 'Liên từ'),
+        (INTERJ, 'Thán từ'),
     ]
     part_of_speech = models.CharField(max_length=1, choices=PART_OF_SPEECH_CHOICES) #TODO: Help text?
 
