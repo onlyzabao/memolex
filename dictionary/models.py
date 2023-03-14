@@ -9,7 +9,7 @@ class Word(models.Model):
 class Meaning(models.Model):
     meaning_id = models.AutoField(primary_key=True)
     meaning = models.TextField()
-    opposite_meaning_id = models.OneToOneField(
+    opposite_meaning = models.OneToOneField(
         'self',
         on_delete=models.SET_NULL,
         to_field='meaning_id',
@@ -25,14 +25,14 @@ class Meaning(models.Model):
     CONJ = '7'
     INTERJ = '8'
     PART_OF_SPEECH_CHOICES = [
-        (N, 'Danh từ'),
-        (V, 'Động từ'),
-        (ADJ, 'Tính từ'),
-        (ADV, 'Trạng từ'),
-        (PRON, 'Đại từ'),
-        (PREP, 'Giới từ'),
-        (CONJ, 'Liên từ'),
-        (INTERJ, 'Thán từ'),
+        (N, 'Noun'),
+        (V, 'Verb'),
+        (ADJ, 'Adjective'),
+        (ADV, 'Adverb'),
+        (PRON, 'Pronoun'),
+        (PREP, 'Preposition'),
+        (CONJ, 'Conjunction'),
+        (INTERJ, 'Interjection'),
     ]
     part_of_speech = models.CharField(max_length=1, choices=PART_OF_SPEECH_CHOICES) #TODO: Help text?
 
@@ -42,17 +42,17 @@ class Tag(models.Model):
 
 class Definition(models.Model):
     definition_id = models.AutoField(primary_key=True)
-    word_id = models.ForeignKey(
+    word = models.ForeignKey(
         Word,
         on_delete=models.CASCADE,
         to_field='word_id'
     )
-    meaning_id = models.ForeignKey(
+    meaning = models.ForeignKey(
         Meaning,
         on_delete=models.CASCADE,
         to_field='meaning_id'
     )
-    tag_id = models.OneToOneField(
+    tag = models.ForeignKey(
         Tag,
         on_delete=models.SET_NULL,
         to_field='tag_id',
@@ -62,7 +62,7 @@ class Definition(models.Model):
 class Example(models.Model):
     example_id = models.AutoField(primary_key=True)
     example = models.TextField()
-    definition_id = models.ForeignKey(
+    definition = models.ForeignKey(
         Definition,
         on_delete=models.CASCADE,
         to_field='definition_id'
