@@ -9,5 +9,23 @@
         <input type="text" name="q">
         <input type="submit" value="Search">
     </form>
+    {% if query %}
+        <h2>Results for "{{ query }}"</h2>
+        {% if definitions %}
+            {% for definition in definitions %}
+                <h3>{{ definition.word }} ({{ definition.part_of_speech }})</h3>
+                <p>{{ definition.definition }}</p>
+                {% if definition.examples %}
+                    <ul>
+                        {% for example in definition.examples %}
+                            <li>{{ example }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    {% endif %}
 </body>
 </html>
