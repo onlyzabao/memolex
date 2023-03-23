@@ -1,69 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
-class Word(models.Model):
-    word_id = models.AutoField(primary_key=True)
-    spelling = models.CharField(max_length=20) # TODO: Create Full-text search index
-    pronunciation = models.CharField(max_length=20)
+class SearchHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    word = models.CharField(max_length=50)
+    search_date = models.DateTimeField(default=timezone.now)
 
-class Meaning(models.Model):
-    meaning_id = models.AutoField(primary_key=True)
-    meaning = models.TextField()
-    opposite_meaning = models.OneToOneField(
-        'self',
-        on_delete=models.SET_NULL,
-        to_field='meaning_id',
-        null=True,
-        related_name='+'
-    )
-    N = '1'
-    V = '2'
-    ADJ = '3'
-    ADV = '4'
-    PRON = '5'
-    PREP = '6'
-    CONJ = '7'
-    INTERJ = '8'
-    PART_OF_SPEECH_CHOICES = [
-        (N, 'Noun'),
-        (V, 'Verb'),
-        (ADJ, 'Adjective'),
-        (ADV, 'Adverb'),
-        (PRON, 'Pronoun'),
-        (PREP, 'Preposition'),
-        (CONJ, 'Conjunction'),
-        (INTERJ, 'Interjection'),
-    ]
-    part_of_speech = models.CharField(max_length=1, choices=PART_OF_SPEECH_CHOICES) #TODO: Help text?
-
-class Tag(models.Model):
-    tag_id = models.AutoField(primary_key=True)
-    tag = models.CharField(max_length=50)
-
-class Definition(models.Model):
-    definition_id = models.AutoField(primary_key=True)
-    word = models.ForeignKey(
-        Word,
-        on_delete=models.CASCADE,
-        to_field='word_id'
-    )
-    meaning = models.ForeignKey(
-        Meaning,
-        on_delete=models.CASCADE,
-        to_field='meaning_id'
-    )
-    tag = models.ForeignKey(
-        Tag,
-        on_delete=models.SET_NULL,
-        to_field='tag_id',
-        null=True
-    )
-
-class Example(models.Model):
-    example_id = models.AutoField(primary_key=True)
-    example = models.TextField()
-    definition = models.ForeignKey(
-        Definition,
-        on_delete=models.CASCADE,
-        to_field='definition_id'
-    )
+    def __str__(self):
+        return f"{self.user.username} searched for '{self.word}' on {self.search_date}"
