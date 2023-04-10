@@ -2,6 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+class Word(models.Model):
+    word = models.CharField(max_length=50)
+    uuid = models.CharField(max_length=50)
+    sn = models.CharField(max_length=10)
+
 class Package(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
@@ -25,6 +30,4 @@ class User_Package(models.Model):
 
 class Word_Package(models.Model):
     package = models.ForeignKey(Package, on_delete=models.CASCADE)
-    word = models.CharField(max_length=50)
-    uuid = models.CharField(max_length=50)
-    sn = models.CharField(max_length=10)
+    word = models.ForeignKey(Word, on_delete=models.RESTRICT)

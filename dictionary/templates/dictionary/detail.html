@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ word }}</title>
+</head>
+<body>
+	<h1>{{ word }}</h1>
+	{% if results|default_if_none:"" %}
+		{% for pos, result in results.items %}
+			<h2> {{ pos }} </h2>
+			<h3> {{ result.pronunciation }} </h3>
+			{% for definition in result.definitions %}
+				<p>{{ definition.text }}</p>
+				{% if definition.examples %}
+					<p>Example: {{ definition.examples|join:", " }}</p>
+				{% endif %}
+				{% if definition.synonyms %}
+					<p>Synonyms: {{ definition.synonyms|join:", " }}</p>
+				{% endif %}
+			{% endfor %}
+		{% endfor%}
+	{% else %}
+		<p> Word was not found <p>
+	{% endif %}
+</body>
+</html>

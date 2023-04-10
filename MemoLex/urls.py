@@ -21,5 +21,7 @@ admin.site.site_header = 'MemoLex'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dictionary/', include('dictionary.urls')),
+    # path('workspace/', include('workspace.urls')),
+    # path('community/', include('community.urls')),
     path('__debug__/', include('debug_toolbar.urls'))
 ]
