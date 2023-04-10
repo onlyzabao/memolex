@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse
-from django.http import JsonResponse
 from . import api
 
 # Create your views here.
@@ -9,7 +8,7 @@ def index(request):
     return HttpResponse("Index")
 
 def detail(request, word):
-    data = api.get(word)
+    data = api.get_from_WordsAPI(word).json()
 
     results = {}
     if "results" in data:
