@@ -1,33 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
-class Word(models.Model):
-    word = models.CharField(max_length=50)
-    uuid = models.CharField(max_length=50)
-    sn = models.CharField(max_length=10)
-
 class Package(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.TextField()
+    # Foreign Key
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Identity
+    name = models.CharField(max_length=64)
+    description = models.TextField(max_length=255, blank=True, null=True)
+    # Attribute
+    progress = models.SmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     PRIVACY_CHOICES = [
         (0, 'Private'),
         (1, 'Public')
     ]
     privacy = models.SmallIntegerField(choices=PRIVACY_CHOICES, default=1)
+    
+    def __str__(self):
+        return self.name
 
-class User_Package(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Word(models.Model):
+    # Foreign Key
     package = models.ForeignKey(Package, on_delete=models.CASCADE)
-    progress = models.SmallIntegerField()
-    STAR_CHOICES = [
-        (0, 'Not started'),
-        (1, 'Remembered'),
-        (2, 'Understood'),
-        (3, 'Applying')
-    ]
-    star = models.SmallIntegerField(choices=STAR_CHOICES, default=0)
-
-class Word_Package(models.Model):
-    package = models.ForeignKey(Package, on_delete=models.CASCADE)
-    word = models.ForeignKey(Word, on_delete=models.RESTRICT)
+    # Identity
+    word = models.CharField(max_length=64)

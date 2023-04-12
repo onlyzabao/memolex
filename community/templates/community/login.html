@@ -1,6 +1,6 @@
-{%extends 'base.html'%}
+{% extends 'base.html' %}
 
-{%block content%}
+{% block content %}
   <div class="center">
 	  <form method="post" class="card">
 	  	{% csrf_token %}
@@ -15,20 +15,9 @@
 		  {% endfor %}
 
       <input type="submit" value="Login" class="btn btn-primary full-width">
-
-      {% if messages %}
-        <div class="messages">
-          {% for message in messages %}
-            <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %}">
-              {{ message }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-
       <hr>
-      <p class="text-center">Forgot your password? <a href="#">Reset Password</a></p>
-      <p class="text-center">Don't have a account? <a href="#">Join Now</a></p>
+      <p class="text-center">Forgot your password? <a href="{% url 'community:password-reset' %}">Reset Password</a></p>
+      <p class="text-center">Don't have a account? <a href="{% url 'community:signup' %}">Join Now</a></p>
 	  </form>
   </div>
-{%endblock content%}
+{% endblock %}
