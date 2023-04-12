@@ -5,7 +5,7 @@
 venv/
 
 # Ignore the static files directory
-static/
+
 
 # Ignore the media files directory
 media/
