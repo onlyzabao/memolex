@@ -4,5 +4,5 @@ from . import views
 app_name = "dictionary"
 urlpatterns = [
     path("", views.index, name="index"),
-    path("<str:word>", views.detail, name="detail")
+    path("dictionary/", views.detail, name="detail")
 ]

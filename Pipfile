@@ -9,6 +9,7 @@ mysqlclient = "*"
 
 [dev-packages]
 requests = "*"
+black = "*"
 
 [requires]
 python_version = "3.11"
