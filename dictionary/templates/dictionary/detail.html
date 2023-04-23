@@ -1,210 +1,97 @@
-{% load static %}
+{% extends "dictionary_base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>Word</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <link href="{% static 'assets/img/logo.png' %}" rel="icon">
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-  <link rel='stylesheet prefetch' href='https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css'>
-
-  <!-- Vendor CSS Files -->
-  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/aos/aos.css" rel="stylesheet' %}">
-
-  <!-- Template Main CSS File -->
-  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
-
-</head>
-
-<body>
-
-  <!-- ======= Header ======= -->
-  <header id="header" class="header d-flex align-items-center fixed-top">
-    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-
-      <a href="index.html" class="logo d-flex align-items-center">
-          <img src="{% static 'assets/img/logo.png' %}" alt=""> 
-          <h1>MemoLex</h1>
-      </a>
-
-      <form action="listword.html" class="form-search d-flex align-items-stretch mb-3">
-          <input type="text" class="form-control" placeholder="Enter the word to search">
-          <button type="submit" class="btn btn-primary">Search</button>
-      </form>
-
-      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
-      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a href="index.html" class="active">Home</a></li>
-          <li class="dropdown"><a href="#"><span>Topics</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
-              <ul>
-              <li><a href="topic.html">Gia đình</a></li>
-              <li><a href="topic.html">Thể thao</a></li>
-              <li><a href="topic.html">Con người</a></li>
-              <li><a href="topic.html">Ẩm thực</a></li>
-              </ul>
-          </li>
-          <li><a href="reviewlist.html">Review</a></li>
-          <li><a class="login" href="login.html">Login</a></li>
-        </ul>
-      </nav><!-- .navbar -->
-
-    </div>
-  </header><!-- End Header -->
-  <!-- End Header -->
-
-  <main id="main">
-    <!-- ======= Word detail ======= -->
-    <section id="word-detail" class="word-detail">
-        <div class="wrapper">
-          <div class = "word text-center"> 
-            <h1> {{ word }} <ion-icon name="volume-high-outline" style="cursor: pointer; size: 20px; padding-left: 7px;"></ion-icon></h1> 
-            {% if results|default_if_none:"" %}
-				{% for pos, result in results.items %}
-					<h5> {{ pos }} </h5>
-					<h5> {{ result.pronunciation }} </h5>
-						<table class="table-fill" style="margin-bottom: 30px;">
-							<colgroup>
-							<col width="300" >
-							<col width="300" >
-							<col width="300" >
-							</colgroup>
-							
-							<thead> 
-							<tr>
-								<th class="text-left">Meaning</th>
-								<th class="text-left">Example</th>
-								<th class="text-left">Synonym</th>
-							</tr>
-							</thead>
-				
-							<tbody class="table-hover">
-							{% for definition in result.definitions %}
-								<tr>
-									<td class="text-left"> {{ definition.text }}</td>
-									<td class="text-left">
-									<ul>
-										{% if definition.examples %}
-											{% for example in definition.examples %}
-												<li> {{ example }} </li>
-											{% endfor %}
-										{% endif %}
-									</ul>
-									</td>
-									<td class="text-left">
-									<ul>
-										{% if definition.synonyms %}
-											{% for synonym in definition.synonyms %}
-												<li><a href = "?word={{ synonym }}" style="color:#0055ff;"> {{ synonym }}</a></li>
-											{% endfor %}
-										{% endif %}
-									</ul> 
-									</td>
-								</tr>
-							{% endfor %}
-							</tbody>
-						</table>
-				{% endfor %}
-			{% else %}
-				<p> Word was not found <p>
-			{% endif %}
+{% block content %}
+<section id="word-detail" class="word-detail">
+  <div class="wrapper">
+    <div class = "word text-center"> 
+      <h1> {{ word }} </h1>
+      
+      <!-- Popup -->
+      <button id="add-to-playlist" style="padding-right: 30px;"><i class="bi bi-plus-circle-fill"></i></button>
+      <div id="playlist-popup" class="popup">
+        <div class="popup-content">
+          <div class="popup-header">
+            <h3>Add to wordlist</h3>
+            <button class="close-popup">&times;</button>
+          </div>
+          <div class="playlist-list">
+            <div class="playlist-container">
+              <label>
+                <input type="checkbox" name="playlist" value="playlist1"> List 1
+              </label><br>
+              <label>
+                <input type="checkbox" name="playlist" value="playlist2"> List 2
+              </label><br>
+              <label>
+                <input type="checkbox" name="playlist" value="playlist3"> List 3
+              </label><br>
+            </div>
           </div>
           
-          <br><br><br>
-            
-       </div>
-          
-
-
-    </section><!-- Word detail -->
-  </main>
-
-    
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-
-    <div class="container">
-      <div class="row gy-4">
-        <div class="col-lg-7 footer-info">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span>MemoLex</span>
-          </a>
-          <p>Online dictionary</p>
-          <div class="social-links d-flex mt-4">
-            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+          <div class="create-playlist">
+            <h4>Create new word list</h4>
+            <input type="text" id="new-playlist-name" placeholder="Name of new list">
+            <button id="create-playlist">Create</button>
           </div>
         </div>
-
-        <div class="col-lg-2 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-          </ul>
-        </div>
-
-
-        <div class="col-lg-2 footer-contact text-center text-md-start">
-          <h4>Contact Us</h4>
-          <p>
-            144 Xuan Thuy <br>
-            Cau Giay, Hanoi <br>
-            Vietnam <br><br>
-            <strong>Phone:</strong> +84 xxx xxx xxx<br>
-            <strong>Email:</strong> xxx@vnu.edu.vn<br>
-          </p>
-
-        </div>
-
       </div>
+
+      {% if results|default_if_none:"" %}
+        {% for pos, result in results.items %}
+          <h5> {{ pos }} </h5>
+          <h5> {{ result.pronunciation }} </h5>
+          
+          <div class="word-infor" id="word-infor">
+            <table class="table-fill" style="margin-bottom: 30px;">
+              <colgroup>
+                <col width="300" >
+                <col width="300" >
+                <col width="300" >
+              </colgroup>
+        
+              <thead> 
+                <tr>
+                  <th class="text-left">Meaning</th>
+                  <th class="text-left">Example</th>
+                  <th class="text-left">Synonym</th>
+                </tr>
+              </thead>
+  
+              <tbody class="table-hover">
+                {% for definition in result.definitions %}
+                  <tr>
+                    <td class="text-left"> {{ definition.text }}</td>
+
+                    <td class="text-left">
+                      <ul>
+                        {% if definition.examples %}
+                          {% for example in definition.examples %}
+                            <li> {{ example }} </li>
+                          {% endfor %}
+                        {% endif %}
+                      </ul>
+                    </td>
+
+                    <td class="text-left">
+                      <ul>
+                        {% if definition.synonyms %}
+                          {% for synonym in definition.synonyms %}
+                            <li><a href = "{% url 'dictionary:detail' %}?word={{ synonym }}" style="color:#0055ff;"> {{ synonym }}</a></li>
+                          {% endfor %}
+                        {% endif %}
+                      </ul> 
+                    </td>
+                    
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p> Word was not found <p>
+      {% endif %}
     </div>
-
-    <div class="container mt-4">
-      <div class="copyright">
-        @INT 2208
-      </div>
-    </div>
-
-    </footer><!-- End Footer -->
-    <!-- End Footer -->
-
-    <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-    <div id="preloader"></div>
-
-    <!-- Vendor JS Files -->
-    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
-    <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
-    <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
-    <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
-    <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
-
-    <!-- Template Main JS File -->
-    <script src="{% static 'assets/js/main.js' %}"></script>
-
-</body>
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-</html>
+  </div>
+</section>
+{% endblock %}

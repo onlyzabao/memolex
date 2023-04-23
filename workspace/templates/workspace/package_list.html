@@ -1,0 +1,23 @@
+{% extends 'workspace_base.html' %}
+
+{% block content %}
+
+<div class="center">
+	<h2>Package List</h2>
+	{% if packages %}
+	<ul class="tasks">
+		{% for package in packages %}
+			<li><a href="{% url 'workspace:package_detail' package.id %}">{{ package.name }}</a> 
+				 <div  class="task-controls">
+				 	<a href="#"><i class="bi bi-trash"></i> </a>
+					<a href="#"><i class="bi bi-pencil-square"></i></a>
+		         </div>
+		    </li>
+		{% endfor %}
+	{% else %}
+		<p>You have no packages!</p>
+	{% endif %}
+	</ul>
+</div>
+
+{% endblock %}

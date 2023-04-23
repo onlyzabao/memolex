@@ -1,8 +1,8 @@
 from django.urls import path
-from . import views
+from .views import TopicListView, detail
 
 app_name = "dictionary"
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("dictionary/", views.detail, name="detail")
+    path("", TopicListView.as_view(), name="topic_list"),
+    path("detail/", detail, name="detail")
 ]

@@ -1,0 +1,222 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta content="width=device-width, initial-scale=1.0" name="viewport">
+      <title>MemoLex</title>
+      <meta content="" name="description">
+      <meta content="" name="keywords">
+      <!-- Favicons -->
+      <link href="{% static 'img/logo.png' %}" rel="icon">
+      <!-- Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+      <!-- Vendor CSS Files -->
+      <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+      <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+      <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+      <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+      <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+      <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+      <!-- Template Main CSS File -->
+      <link href="{% static 'css/main.css' %}" rel="stylesheet">
+   </head>
+   <body>
+      <!-- ======= Header ======= -->
+      <header id="header" class="header d-flex align-items-center fixed-top">
+         <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+            <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+               <img src="{% static 'img/logo.png' %}" alt=""> 
+               <h1>MemoLex</h1>
+            </a>
+            <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+            <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+            <nav id="navbar" class="navbar">
+               <ul>
+                  <li><a href="{% url 'home' %}" class="active">Home</a></li>
+                  <li><a href="{% url 'dictionary:topic_list' %}" class="active">Dictionary</a></li>
+                  <li><a href="{% url 'workspace:package_list' %}" class="active">Workspace</a></li>
+                  <li><a href="{% url 'community:index' %}" class="active">Community</a></li>
+                  {% if request.user.is_authenticated %}
+                     <li class="nav-item dropdown">
+                           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Hello, {{ request.user | title }}
+                           </a>
+                           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <li>
+                                 <a href="{% url 'community:profile' %}" data-gallery="Portfolio" class="portfolio-lightbox preview-link">Profile</a>
+                              </li>
+                              <li><a class="dropdown-item" href="{% url 'community:logout' %}">Logout</a></li>
+                           </ul>
+                     </li>
+                  {% else %}
+                     <li><a class="login" href="{% url 'community:login' %}">Login</a></li>
+                  {% endif %}
+               </ul>
+            </nav>
+            <!-- .navbar -->
+         </div>
+      </header>
+      <!-- End Header -->
+      <!-- ======= Hero Section ======= -->
+      <section id="hero" class="hero d-flex align-items-center">
+         <div class="container">
+            <section id="hero-animated" class="hero-animated d-flex align-items-center">
+               <div class="container d-flex flex-column justify-content-center align-items-center text-center position-relative">
+                  <img src="{% static 'img/hero-img.png' %}" style="width: 40%; height: 40%;" class="img-fluid animated">
+                  <h2 data-aos="fade-up">Welcome to MemoLex</h2>
+                  <p data-aos="fade-up" data-aos-delay="100">In an increasingly globalized society, being able to speak a foreign language is an advantage. Let's master English together with MemoLex!</p>
+                  <form method="GET" action="{% url 'dictionary:detail' %}" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
+                     <input type="text" id="word" name="word" class="form-control" placeholder="Enter the word to search" required>
+                     <button type="submit" class="btn btn-primary">Search</button>
+                  </form>
+               </div>
+            </section>
+         </div>
+      </section>
+      <!-- End Hero Section -->
+      <main id="main">
+         <!-- ======= About Us Section ======= --> 
+         <a name = "introduction"></a>
+         <section id="about" class="about pt-0">
+            <div class="container" data-aos="fade-up">
+               <div class="row gy-4">
+                  <div class="col-lg-6 position-relative align-self-start order-lg-last order-first">
+                     <img src="{% static 'img/logo.png' %}" style="padding-left: 80px;" class="img-fluid" alt="">
+                  </div>
+                  <div class="col-lg-6 content order-last  order-lg-first">
+                     <h3>Introduction</h3>
+                     <p>
+                        Have you ever asked yourself why English is so important? We all know that English is considered the global language, with hundreds of countries having adopted it as their second language. Here are the reasons why:
+                     </p>
+                     <ul>
+                        <li data-aos="fade-up" data-aos-delay="100">
+                           <i class="bi bi-lightbulb"></i>
+                           <div>
+                              <h5>The English language is the bridge that connects us to the body of knowledge of humanity</h5>
+                              <p>"You live a new life for every language you speak. If you only know one language, you live only once." (French proverb) </p>
+                           </div>
+                        </li>
+                        <li data-aos="fade-up" data-aos-delay="200">
+                           <i class="bi bi-map"></i>
+                           <div>
+                              <h5>Traveling everywhere is so much easier when you know English</h5>
+                              <p>English is the powerful assistant that makes your trip easy, convenient, meaningful, and memorable. "The limits of my language means the limits of my world" (Ludwig Wittgenstein)</p>
+                           </div>
+                        </li>
+                        <li data-aos="fade-up" data-aos-delay="300">
+                           <i class="bi bi-award"></i>
+                           <div>
+                              <h5>Learning English helps our brain to develop</h5>
+                              <p>According to scientific research, people who speak more than one language often have better memory, creativity, and mental flexibility compared to those who only know one language</p>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </section>
+         <!-- End About Us Section -->
+         <!-- ======= Featured Services Section ======= -->
+         <section id="featured-services" class="featured-services">
+            <div class="container">
+               <div class="row gy-4">
+                  <div class="service-item text-center" data-aos="fade-up">
+                     <h1>MemoLex's main features</h1>
+                  </div>
+                  <div class="col-lg-6 col-md-6 service-item d-flex" data-aos="fade-up">
+                     <div class="icon flex-shrink-0"><i class="bi bi-search"></i></div>
+                     <div>
+                        <h4 class="title">Look up vocabulary</h4>
+                        <p class="description">MemoLex provides a rich and diverse dictionary repository that meets the quick and convenient lookup needs of Internet users</p>
+                        <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+                     </div>
+                  </div>
+                  <!-- End Service Item -->
+                  <div class="col-lg-6 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+                     <div class="icon flex-shrink-0"><i class="bi bi-book"></i></div>
+                     <div>
+                        <h4 class="title">Review vocabulary</h4>
+                        <p class="description">The most effective way to improve your vocabulary retention, increase your ability to use new words, and reduce the likelihood of forgetting them is to practice and use the words regularly</p>
+                        <a href="dictionary/index.html" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+                     </div>
+                  </div>
+                  <!-- End Service Item -->
+               </div>
+            </div>
+         </section>
+         <!-- End Featured Services Section -->
+         <!-- ======= Call To Action Section ======= -->
+         <section id="call-to-action" class="call-to-action">
+            <div class="container" data-aos="zoom-out">
+               <div class="row justify-content-center">
+                  <div class="col-lg-8 text-center">
+                     <h3>Review now</h3>
+                     <p> So why hesitate any longer without reviewing the words you've learned with MemoLex?</p>
+                     <a class="cta-btn" href="login.html">Review</a>
+                  </div>
+               </div>
+            </div>
+         </section>
+         <!-- End Call To Action Section -->
+      </main>
+      <!-- End #main -->
+      <!-- ======= Footer ======= -->
+      <footer id="footer" class="footer">
+         <div class="container">
+            <div class="row gy-4">
+               <div class="col-lg-7 footer-info">
+                  <a href="dictionary/index.html" class="logo d-flex align-items-center">
+                  <span>MemoLex</span>
+                  </a>
+                  <p>Online dictionary</p>
+                  <div class="social-links d-flex mt-4">
+                     <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                     <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                     <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                     <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                  </div>
+               </div>
+               <div class="col-lg-2 footer-links">
+                  <h4>Useful Links</h4>
+                  <ul>
+                     <li><a href="#">Home</a></li>
+                     <li><a href="#introduction">Introduction</a></li>
+                     <li><a href="#topic">Featured topics</a></li>
+                  </ul>
+               </div>
+               <div class="col-lg-2 footer-contact text-center text-md-start">
+                  <h4>Contact Us</h4>
+                  <p>
+                     144 Xuan Thuy <br>
+                     Cau Giay, Hanoi <br>
+                     Vietnam <br><br>
+                     <strong>Phone:</strong> +84 xxx xxx xxx<br>
+                     <strong>Email:</strong> xxx@vnu.edu.vn<br>
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="container mt-4">
+            <div class="copyright">
+               @INT 2208
+            </div>
+         </div>
+      </footer>
+      <!-- End Footer -->
+      <!-- End Footer -->
+      <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+      <div id="preloader"></div>
+      <!-- Vendor JS Files -->
+      <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+      <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+      <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+      <script src="{% static 'vendor/aos/aos.js' %}"></script>
+      <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+      <!-- Template Main JS File -->
+      <script src="{% static 'js/main.js' %}"></script>
+   </body>
+</html>

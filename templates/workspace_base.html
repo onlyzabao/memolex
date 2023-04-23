@@ -23,8 +23,8 @@
 					   {% endfor %}
 				{% endif %}
             
-             {%block content %}
-             {%endblock content%}
+             {% block content %}
+             {% endblock %}
 
             </div>
         </main>
@@ -34,4 +34,6 @@
             </div>
         </footer>
     </body>
+    {% block script %}
+    {% endblock %}
 </html>
