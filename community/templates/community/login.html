@@ -1,22 +1,37 @@
-{% extends 'community_base.html' %}
+{% extends 'authentication_base.html' %}
+
+{% block title %}
+  Login
+{% endblock %}
 
 {% block content %}
-  <div class="main">
-	  <form method="post" class="card">
-	  	{% csrf_token %}
-	    <h2 class="sign" align="center">Log in to your account</h2>
+  <div class="center">
+    <form method="post" class="card">
+      {% csrf_token %}
+      <h2 class="text-center">Log in</h2>
 
-		  {% for field in form %}
-	    	{{ field.label_tag }} 
-	      {{ field }}
+      {% for field in form %}
+        {{ field.label_tag }} 
+        {{ field }}
         {% if field.errors %}
           <small>{{ field.errors|striptags }}</small> 
         {% endif %}
-		  {% endfor %}
+      {% endfor %}
 
-      <input class="submit" type="submit" value="Login" class="btn btn-primary full-width">
-      <p class="forgot" align="center">Forgot your password? <a href="{% url 'community:password-reset' %}">Reset Password</a></p>
-      <p class="forgot" align="center" style="padding-top: 5px;">Don't have a account? <a href="{% url 'community:signup' %}">Join Now</a></p>
-	  </form>
+      <input type="submit" value="Login" class="btn btn-primary full-width">
+      <hr>
+      <p class="text-center">Forgot your password? <a href="{% url 'community:password-reset' %}">Reset Password</a></p>
+      <p class="text-center">Don't have a account? <a href="{% url 'community:signup' %}">Join Now</a></p>
+    </form>
   </div>
+{% endblock %}
+
+{% block message %}
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+  {% endif %}
 {% endblock %}

@@ -1,0 +1,42 @@
+{%load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+
+        <!-- Favicons -->
+        <link href="{% static 'img/logo.png' %}" rel="icon">
+        <link rel="stylesheet" href="{% static 'css/authentication.css' %}">
+    </head>
+    <body>
+        <header class="header">
+            <div class="container">
+            </div>
+        </header>
+        <main>
+            <div class="container">
+
+                {% block message %}
+                {% endblock %}
+                
+                {%block content %}
+                {%endblock content%}
+
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="container">
+            </div>
+        </footer>
+    </body>
+</html>
