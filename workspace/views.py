@@ -54,7 +54,7 @@ class PackageCreateView(LoginRequiredMixin, View):
                 word.save()
             return redirect("workspace:package_detail", pk=package.pk)
         else:
-            messages.error(request, "Error in create package.")
+            messages.error(request, "Error creating your package.")
 
             context = {"package_form":package_form, "word_formset":word_formset}
 

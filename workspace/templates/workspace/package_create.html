@@ -17,16 +17,22 @@
 
         <h2>Add Word</h2>
         {{ word_formset.management_form }}
-            {% if word_formset.errors %}
-                {% for field, errors in word_formset.errors.items %}
-                    {% for error in errors %}
-                        <small class="error">{{ field }}: {{ error }}</small> 
-                    {% endfor %}
-                {% endfor %}    
-        {% endif %}
+
+        {% for word_form in word_formset %}
+            {% for word_field in word_form %}
+                <div class="row spacer form-row">
+                    {{ word_field.label_tag }}
+                    {{ word_field }}
+                    <button class="btn btn-danger remove-form-row">-</button>
+                    {% if word_field.errors %}
+                        <small class="error">{{ word_field.errors|striptags }}</small> 
+                    {% endif %}
+                </div>
+            {% endfor%}
+        {% endfor %}
             
         <div class="row spacer empty-form-row">
-            {{ word_formset.empty_form.spelling.label }}
+            {{ word_formset.empty_form.spelling.label_tag }}
             {{ word_formset.empty_form.spelling }}
             <button class="btn btn-success add-form-row">+</button>
         </div>
@@ -38,80 +44,80 @@
 {% endblock %}
 
 {% block script %}
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script type="text/javascript">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script type="text/javascript">
 
-    function updateElementIndex(el, prefix, ndx) {
-        var id_regex = new RegExp("(" + prefix + "-\\d+)");
-        var replacement = prefix + "-" + ndx;
-        if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
-        if (el.id) el.id = el.id.replace(id_regex, replacement);
-        if (el.name) el.name = el.name.replace(id_regex, replacement);
-    }
-
-    function cloneMore(selector, prefix) {
-        var input = $(selector).find("input");
-        if (input.val() === "") {
-            alert('Input field cannot be empty.');
-            return;
+        function updateElementIndex(el, prefix, ndx) {
+            var id_regex = new RegExp("(" + prefix + "-\\d+)");
+            var replacement = prefix + "-" + ndx;
+            if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+            if (el.id) el.id = el.id.replace(id_regex, replacement);
+            if (el.name) el.name = el.name.replace(id_regex, replacement);
         }
-        var newElement = $(selector).clone(true);
-        newElement.removeClass("empty-form-row").addClass("form-row");
-        var total = $("#id_" + prefix + "-TOTAL_FORMS").val();
-        newElement.find(":input:not([type=button]):not([type=submit]):not([type=reset])").each(function() {
-            var name = $(this).attr("name")
-            if(name) {
-                name = name.replace("-" + "__prefix__" + "-", "-" + total + "-");
-                var id = "id_" + name;
-                $(this).attr({"name": name, "id": id}).val("").removeAttr("checked");
-            }
-        });
-        newElement.find("label").each(function() {
-            var forValue = $(this).attr("for");
-            if (forValue) {
-            forValue = forValue.replace("-" + (total-1) + "-", "-" + total + "-");
-            $(this).attr({"for": forValue});
-            }
-        });
-        newElement.find("input").val(input.val());
-        input.val("");
-        total++;
-        $("#id_" + prefix + "-TOTAL_FORMS").val(total);
-        $(selector).before(newElement);
-        var conditionRow = $(".form-row");
-        conditionRow.find(".btn.add-form-row")
-        .removeClass("btn-success").addClass("btn-danger")
-        .removeClass("add-form-row").addClass("remove-form-row")
-        .html("-");
-        return false;
-    }
 
-    function deleteForm(prefix, btn) {
-        var total = parseInt($("#id_" + prefix + "-TOTAL_FORMS").val());
-        if (total > 0){
-            btn.closest(".form-row").remove();
-            var forms = $(".form-row");
-            $("#id_" + prefix + "-TOTAL_FORMS").val(forms.length);
-            for (var i=0, formCount=forms.length; i<formCount; i++) {
-                $(forms.get(i)).find(":input").each(function() {
-                    updateElementIndex(this, prefix, i);
-                });
+        function cloneMore(selector, prefix) {
+            var input = $(selector).find("input");
+            if (input.val() === "") {
+                alert('Input field cannot be empty.');
+                return;
             }
+            var newElement = $(selector).clone(true);
+            newElement.removeClass("empty-form-row").addClass("form-row");
+            var total = $("#id_" + prefix + "-TOTAL_FORMS").val();
+            newElement.find(":input:not([type=button]):not([type=submit]):not([type=reset])").each(function() {
+                var name = $(this).attr("name")
+                if(name) {
+                    name = name.replace("-" + "__prefix__" + "-", "-" + total + "-");
+                    var id = "id_" + name;
+                    $(this).attr({"name": name, "id": id}).val("").removeAttr("checked");
+                }
+            });
+            newElement.find("label").each(function() {
+                var forValue = $(this).attr("for");
+                if (forValue) {
+                forValue = forValue.replace("-" + (total-1) + "-", "-" + total + "-");
+                $(this).attr({"for": forValue});
+                }
+            });
+            newElement.find("input").val(input.val());
+            input.val("");
+            total++;
+            $("#id_" + prefix + "-TOTAL_FORMS").val(total);
+            $(selector).before(newElement);
+            var conditionRow = $(".form-row");
+            conditionRow.find(".btn.add-form-row")
+            .removeClass("btn-success").addClass("btn-danger")
+            .removeClass("add-form-row").addClass("remove-form-row")
+            .html("-");
+            return false;
         }
-        return false;
-    }
 
-    $(document).on("click", ".add-form-row", function(e){
-        e.preventDefault();
-        cloneMore(".empty-form-row:last", "form");
-        return false;
-    });
+        function deleteForm(prefix, btn) {
+            var total = parseInt($("#id_" + prefix + "-TOTAL_FORMS").val());
+            if (total > 0){
+                btn.closest(".form-row").remove();
+                var forms = $(".form-row");
+                $("#id_" + prefix + "-TOTAL_FORMS").val(forms.length);
+                for (var i=0, formCount=forms.length; i<formCount; i++) {
+                    $(forms.get(i)).find(":input").each(function() {
+                        updateElementIndex(this, prefix, i);
+                    });
+                }
+            }
+            return false;
+        }
 
-    $(document).on("click", ".remove-form-row", function(e){
-        e.preventDefault();
-        deleteForm("form", $(this));
-        return false;
-    });
+        $(document).on("click", ".add-form-row", function(e){
+            e.preventDefault();
+            cloneMore(".empty-form-row:last", "form");
+            return false;
+        });
 
-</script>
+        $(document).on("click", ".remove-form-row", function(e){
+            e.preventDefault();
+            deleteForm("form", $(this));
+            return false;
+        });
+
+    </script>
 {% endblock %}
