@@ -68,7 +68,7 @@
                   <img src="{% static 'img/hero-img.png' %}" style="width: 40%; height: 40%;" class="img-fluid animated">
                   <h2 data-aos="fade-up">Welcome to MemoLex</h2>
                   <p data-aos="fade-up" data-aos-delay="100">In an increasingly globalized society, being able to speak a foreign language is an advantage. Let's master English together with MemoLex!</p>
-                  <form method="GET" action="{% url 'dictionary:detail' %}" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
+                  <form method="GET" action="{% url 'dictionary:word_detail' %}" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
                      <input type="text" id="word" name="word" class="form-control" placeholder="Enter the word to search" required>
                      <button type="submit" class="btn btn-primary">Search</button>
                   </form>

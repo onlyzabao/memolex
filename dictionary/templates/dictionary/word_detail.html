@@ -76,7 +76,7 @@
                       <ul>
                         {% if definition.synonyms %}
                           {% for synonym in definition.synonyms %}
-                            <li><a href = "{% url 'dictionary:detail' %}?word={{ synonym }}" style="color:#0055ff;"> {{ synonym }}</a></li>
+                            <li><a href = "{% url 'dictionary:word_detail' %}?word={{ synonym }}" style="color:#0055ff;"> {{ synonym }}</a></li>
                           {% endfor %}
                         {% endif %}
                       </ul> 
