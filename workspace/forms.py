@@ -1,9 +1,9 @@
 import enchant
 from django import forms
-from django.forms import modelformset_factory
+from django.forms import inlineformset_factory
 from .models import Word, Package
 
-class PackageCreateForm(forms.ModelForm):
+class PackageForm(forms.ModelForm):
     class Meta:
         model = Package
         fields = ["name", "description", "date", "privacy"]
@@ -17,12 +17,14 @@ class PackageCreateForm(forms.ModelForm):
             "date":"Review Schedule"
         }
 
-class BaseWordCreateFormSet(forms.BaseFormSet):
+class WordInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
         if any(self.errors):
             return
         words = []
         for form in self.forms:
+            if self.can_delete and self._should_delete_form(form):
+                continue
             dictionary = enchant.Dict("en_US")
             word = form.cleaned_data.get("spelling")
             if not word:
@@ -33,7 +35,7 @@ class BaseWordCreateFormSet(forms.BaseFormSet):
                 form.add_error("spelling", "This word is duplicated.")
             words.append(word)
 
-class WordCreateForm(forms.ModelForm):
+class WordForm(forms.ModelForm):
     class Meta:
         model = Word
         fields = ["spelling"]
@@ -41,5 +43,12 @@ class WordCreateForm(forms.ModelForm):
             "spelling":"Word"
         }
 
-WordCreateFormSet = modelformset_factory(model=Word, form=WordCreateForm, formset=BaseWordCreateFormSet, extra=0)
+WordFormSet = inlineformset_factory(
+    parent_model=Package, 
+    model=Word, 
+    form=WordForm, 
+    formset=WordInlineFormSet, 
+    extra=0, 
+    can_delete=True
+)
 
