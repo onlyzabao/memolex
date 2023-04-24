@@ -8,7 +8,7 @@ venv/
 
 
 # Ignore the media files directory
-media/
+
 
 # Ignore the database file(s)
 db.sqlite3
