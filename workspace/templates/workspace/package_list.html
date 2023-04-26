@@ -9,13 +9,13 @@
 		{% for package in packages %}
 			<li><a href="{% url 'workspace:package_detail' package.id %}">{{ package.name }}</a> 
 				 <div  class="task-controls">
-				 	<a href="#"><i class="bi bi-trash"></i> </a>
-					<a href="#"><i class="bi bi-pencil-square"></i></a>
+				 	<a href="{% url "workspace:package_delete" package.id %}"><i class="bi bi-trash"></i> </a>
+					<a href="{% url "workspace:package_update" package.id %}"><i class="bi bi-pencil-square"></i></a>
 		         </div>
 		    </li>
 		{% endfor %}
 	{% else %}
-		<p>You have no packages!</p>
+		<p>You have no packages! <a href="{% url "workspace:package_create" %}">Create Package</a></p>
 	{% endif %}
 	</ul>
 </div>

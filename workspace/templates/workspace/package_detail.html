@@ -3,17 +3,23 @@
 {% block content %}
 
 <h1>{{ package.name }}</h1>
-  <p>{{ package.description }}</p>
-  <p>Progress: {{ package.progress }}</p>
-  <p>Privacy: {{ package.get_privacy_display }}</p>
+    <p>{{ package.description }}</p>
+    <p>Privacy: {{ package.get_privacy_display }}</p>
+    {% if package.date %}
+        <p>Review Date: {{ package.get_date_display }}</p>
+    {% else %}
+        <p>Review Date: Not Planned</p>
+    {% endif %}
+    <p>Progress: {{ package.progress }}</p>
+    <p>Level: {{ package.get_level_display }}</p>
 
-  <h2>Words</h2>
-  <ul>
-    {% for word in package.word_set.all %}
-      <li>{{ word.spelling }}</li>
-    {% empty %}
-      <li>No words found.</li>
-    {% endfor %}
-  </ul>
-
+    <h2>Words</h2>
+    <ul>
+        {% for word in package.word_set.all %}
+        <li>{{ word.spelling }}</li>
+        {% empty %}
+        <li>No words found.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url "workspace:package_list" %}">Package List</a>
 {% endblock %}

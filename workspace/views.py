@@ -1,9 +1,10 @@
 from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Package, Word
 from .forms import PackageForm, WordFormSet
@@ -86,3 +87,18 @@ class PackageUpdateView(LoginRequiredMixin, View):
 
             return render(request, "workspace/package_form.html", context)
         
+class PackageDeleteView(LoginRequiredMixin, DeleteView):
+    model = Package
+    context_object_name = "package"
+    template_name = "workspace/package_delete.html"
+    success_url = reverse_lazy("workspace:package_list")
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        words = Word.objects.filter(package=self.object)
+        words.delete()
+        return super().delete(self, request, *args, **kwargs)    
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Your package was deleted successfully.")
+        return super(PackageDeleteView, self).form_valid(form)
