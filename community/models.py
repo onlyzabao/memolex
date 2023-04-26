@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
 
+User._meta.get_field('email')._unique = True
 # Create your models here.
 class Profile(models.Model):
     # Foreign Key

@@ -16,7 +16,7 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(next_page="home"), name="logout"),
     path("signup/", MemoLexSignupView.as_view(), name="signup"),
     path(
-        "password-reset/",
+        "password_reset/",
         PasswordResetView.as_view(
             template_name="community/password_reset.html",
             email_template_name="community/password_reset_email.html",

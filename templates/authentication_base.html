@@ -16,27 +16,25 @@
 
         <!-- Favicons -->
         <link href="{% static 'img/logo.png' %}" rel="icon">
+        <!--Vendor CSS-->
+        <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+        <!--Template CSS-->
         <link rel="stylesheet" href="{% static 'css/authentication.css' %}">
     </head>
     <body>
-        <header class="header">
-            <div class="container">
-            </div>
-        </header>
-        <main>
-            <div class="container">
+        <div class="main" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1500">
 
-                {% block message %}
-                {% endblock %}
-                
-                {%block content %}
-                {%endblock content%}
+            {% block message %}
+            {% endblock %}
+            
+            {%block content %}
+            {%endblock content%}
 
-            </div>
-        </main>
-        <footer class="footer">
-            <div class="container">
-            </div>
-        </footer>
+        </div>
+        <!--Vendor JS-->
+        <script src="{% static 'vendor/aos/aos.js' %}"></script>
+        <script>
+            AOS.init();
+        </script>
     </body>
 </html>

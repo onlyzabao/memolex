@@ -963,7 +963,7 @@ th:last-child {
  
 tr {
  border-top: 1px solid #C1C3D1;
- border-bottom-: 1px solid #C1C3D1;
+ border-bottom: 1px solid #C1C3D1;
  color:#000000;
  font-size:16px;
  font-weight:normal;
@@ -1275,9 +1275,3 @@ input[type="checkbox"] {
   color: white;
   border-color: #F76C6C;
 }
-
-
-
-
-
-
