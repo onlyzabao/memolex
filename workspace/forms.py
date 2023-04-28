@@ -1,6 +1,5 @@
 import enchant
 from django import forms
-from django.forms import inlineformset_factory
 from .models import Word, Package
 
 class PackageForm(forms.ModelForm):
@@ -42,13 +41,4 @@ class WordForm(forms.ModelForm):
         labels = {
             "spelling":"Word"
         }
-
-WordFormSet = inlineformset_factory(
-    parent_model=Package, 
-    model=Word, 
-    form=WordForm, 
-    formset=WordInlineFormSet, 
-    extra=0, 
-    can_delete=True
-)
 

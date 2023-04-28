@@ -31,8 +31,10 @@ class WordsAPI():
                 if "pronunciation" in data:
                     if pos in data["pronunciation"]:
                         results[pos]["pronunciation"] = data["pronunciation"][pos]
-                    else:
+                    elif "all" in data["pronunciation"]:
                         results[pos]["pronunciation"] = data["pronunciation"]["all"]
+                    else:
+                        results[pos]["pronunciation"] = data["pronunciation"]
                 
                 definition = {}
                 definition["key"] = i

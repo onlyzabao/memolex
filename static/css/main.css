@@ -1144,7 +1144,8 @@ width: 100%;
 
 .playlist-list {
   margin-left: 20px;
-  margin-bottom: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   height: 200px;
   text-align: left;
   overflow-y: scroll;
@@ -1155,17 +1156,54 @@ width: 100%;
   margin-bottom: 10px;
 }
 
+.playlist-blank {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 60px;
+  text-align: center;
+}
+
 input[type="checkbox"] {
   margin-right: 10px; /* Tạo khoảng cách giữa checkbox và text */
 }
 
-.create-playlist {
-  margin-top: 10px;
+.control-playlist {
   text-align: center;
 }
 
+#save-playlist {
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 5px;
+  background-color: #A8D0E6;
+  border-color: #A8D0E6;
+}
+
+#save-playlist:hover {
+  background-color: #F76C6C;
+  color: white;
+  border-color: #F76C6C;
+}
+
+#close-playlist {
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  border-color: #f2f2f2;
+}
+
+#close-playlist:hover {
+  background-color: #F76C6C;
+  color: white;
+  border-color: #F76C6C;
+}
+
 #create-playlist {
-  margin-left: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
   border-radius: 5px;
   background-color: #A8D0E6;
   border-color: #A8D0E6;
@@ -1185,13 +1223,27 @@ input[type="checkbox"] {
   width: 30px;
 }
 
-.popup-message {
+.popup-message-success {
   position: fixed;
   bottom: 30px;
   left: 30px;
-  width: 200px;
-  background-color: white;
-  color: #141518;
+  width: 250px;
+  background-color: #1ba345;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+  z-index: 9999;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.popup-message-error {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  width: 250px;
+  background-color: #F76C6C;
+  color: white;
   padding: 10px;
   font-size: 18px;
   z-index: 9999;

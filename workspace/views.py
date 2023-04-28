@@ -6,8 +6,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
+from django.forms import inlineformset_factory
+from django.http import JsonResponse
 from .models import Package, Word
-from .forms import PackageForm, WordFormSet
+from .forms import PackageForm, WordForm, WordInlineFormSet
+import json
 
 
 # Create your views here.
@@ -33,14 +36,39 @@ class PackageDetailView(LoginRequiredMixin, DetailView):
 
 class PackageCreateView(LoginRequiredMixin, View):
     def get(self, request):
+        if request.GET.get("word"):
+            extra_forms = 1
+            initial_data = [{"spelling": request.GET.get("word")}]
+        else:
+            extra_forms = 0
+            initial_data = []
+
+        WordFormSet = inlineformset_factory(
+            parent_model=Package, 
+            model=Word, 
+            form=WordForm, 
+            formset=WordInlineFormSet, 
+            extra=extra_forms,
+            can_delete=True
+        )
+
         package_form = PackageForm()
-        word_formset = WordFormSet(prefix="form")
+        word_formset = WordFormSet(prefix="form", initial=initial_data)
 
         context = {"package_form":package_form, "word_formset":word_formset}
 
         return render(request, "workspace/package_form.html", context)
     
     def post(self, request):
+        WordFormSet = inlineformset_factory(
+            parent_model=Package, 
+            model=Word, 
+            form=WordForm, 
+            formset=WordInlineFormSet, 
+            extra=0, 
+            can_delete=True
+        )
+
         package_form = PackageForm(data=request.POST)
         word_formset = WordFormSet(data=request.POST, prefix="form")
 
@@ -64,6 +92,15 @@ class PackageCreateView(LoginRequiredMixin, View):
 class PackageUpdateView(LoginRequiredMixin, View):
     def get(self, request, pk):
         package = get_object_or_404(Package, pk=pk)
+        WordFormSet = inlineformset_factory(
+            parent_model=Package, 
+            model=Word, 
+            form=WordForm, 
+            formset=WordInlineFormSet, 
+            extra=0, 
+            can_delete=True
+        )
+
         package_form = PackageForm(instance=package)
         word_formset = WordFormSet(instance=package, prefix="form")
 
@@ -73,6 +110,15 @@ class PackageUpdateView(LoginRequiredMixin, View):
     
     def post(self, request, pk):
         package = get_object_or_404(Package, pk=pk)
+        WordFormSet = inlineformset_factory(
+            parent_model=Package, 
+            model=Word, 
+            form=WordForm, 
+            formset=WordInlineFormSet, 
+            extra=0, 
+            can_delete=True
+        )
+
         package_form = PackageForm(data=request.POST, instance=package)
         word_formset = WordFormSet(data=request.POST, instance=package, prefix="form")
 
@@ -102,3 +148,23 @@ class PackageDeleteView(LoginRequiredMixin, DeleteView):
     def form_valid(self, form):
         messages.success(self.request, "Your package was deleted successfully.")
         return super(PackageDeleteView, self).form_valid(form)
+    
+class PackageAddWordView(LoginRequiredMixin, View):
+    def post(self, request):
+        status = False
+        data = json.loads(request.body)
+
+        if "packages_id" in data and "word" in data: 
+            spelling = data["word"]
+            for package_id in data["packages_id"]:
+                duplicated_word = Word.objects.filter(package__id=package_id, spelling=spelling)
+                if not duplicated_word.exists():
+                    package = Package.objects.get(pk=package_id)
+                    word = Word(package=package, spelling=spelling)
+                    word.save()
+            status = True
+    
+    
+        response = {"success": status}
+
+        return JsonResponse(response)

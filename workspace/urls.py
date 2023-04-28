@@ -4,7 +4,8 @@ from .views import (
     PackageDetailView, 
     PackageCreateView, 
     PackageUpdateView,
-    PackageDeleteView
+    PackageDeleteView,
+    PackageAddWordView
 )
 
 app_name = "workspace"
@@ -13,5 +14,6 @@ urlpatterns = [
     path("package/<int:pk>/", PackageDetailView.as_view(), name="package_detail"),
     path("package/create/", PackageCreateView.as_view(), name="package_create"),
     path("package/update/<int:pk>/", PackageUpdateView.as_view(), name="package_update"),
-    path("package/delete/<int:pk>/", PackageDeleteView.as_view(), name="package_delete")
+    path("package/delete/<int:pk>/", PackageDeleteView.as_view(), name="package_delete"),
+    path("package/add-word/", PackageAddWordView.as_view(), name="package_add_word")
 ]

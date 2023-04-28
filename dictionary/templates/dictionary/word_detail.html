@@ -1,97 +1,215 @@
 {% extends "dictionary_base.html" %}
 
+{% load static %}
+
+{% block title %}
+	Definitions
+{% endblock %}
+
 {% block content %}
-<section id="word-detail" class="word-detail">
-  <div class="wrapper">
-    <div class = "word text-center"> 
-      <h1> {{ word }} </h1>
-      
-      <!-- Popup -->
-      <button id="add-to-playlist" style="padding-right: 30px;"><i class="bi bi-plus-circle-fill"></i></button>
-      <div id="playlist-popup" class="popup">
-        <div class="popup-content">
-          <div class="popup-header">
-            <h3>Add to wordlist</h3>
-            <button class="close-popup">&times;</button>
-          </div>
-          <div class="playlist-list">
-            <div class="playlist-container">
-              <label>
-                <input type="checkbox" name="playlist" value="playlist1"> List 1
-              </label><br>
-              <label>
-                <input type="checkbox" name="playlist" value="playlist2"> List 2
-              </label><br>
-              <label>
-                <input type="checkbox" name="playlist" value="playlist3"> List 3
-              </label><br>
-            </div>
-          </div>
-          
-          <div class="create-playlist">
-            <h4>Create new word list</h4>
-            <input type="text" id="new-playlist-name" placeholder="Name of new list">
-            <button id="create-playlist">Create</button>
-          </div>
-        </div>
-      </div>
+	<section id="word-detail" class="word-detail">
+	<div class="wrapper">
+		<div class = "word text-center">
+			{% if results %}
+			<!--Popup-Start-->
+			<h1> 
+				{{ word }}
+				<button id="open-playlist" class="btn" style="font-size:24px"><i class="bi bi-plus-circle-fill"></i></button>
+			</h1>
+			<div id="playlist-popup" class="popup">
+				<div class="popup-content">
+					<div class="popup-header">
+						<h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Add to Package</h3>
+					</div>
+					{% if packages %}
+						<div class="playlist-list">
+							<div class="playlist-container">
+								{% for package in packages %}
+									<label>
+									<input type="checkbox" name="playlist" value="{{ package.id }}"> {{ package.name }}
+									</label>
+									<br>
+								{% endfor %}
+							</div>
+						</div>
+						<div class="control-playlist">
+							<button id="close-playlist">Cancel</button>
+							<button id="save-playlist">Save</button>
+						</div>
+					{% else %}
+						<div class="playlist-blank">
+							<p>You've not had any package yet. Create a new one?</p>
+						</div>
+						<div class="control-playlist">
+							<button id="close-playlist">Cancel</button>
+							<button id="create-playlist">Create</button>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+			<!--Popup-End-->
+			{% for pos, result in results.items %}
+				<h4> {{ pos }} </h4>
+				<h5 style="color:#F76C6C;"> {{ result.pronunciation }} </h5>
+				<!--Word detail-Start-->
+				<div class="word-infor" id="word-infor">
+					<table class="table-fill" style="margin-bottom: 30px;" data-aos="zoom-in" data-aos-duration="750">
+					<colgroup>
+						<col width="300" >
+						<col width="300" >
+						<col width="300" >
+					</colgroup>
+					<thead>
+						<tr>
+							<th class="text-center">Meaning</th>
+							<th class="text-center">Example</th>
+							<th class="text-center">Synonym</th>
+						</tr>
+					</thead>
+					<tbody class="table-hover">
+						{% for definition in result.definitions %}
+							<tr>
+								<td class="text-left">{{ definition.text }}</td>
+								<td class="text-left">
+									<ul>
+									{% if definition.examples %}
+										{% for example in definition.examples %}<li>{{ example }}</li>{% endfor %}
+									{% endif %}
+									</ul>
+								</td>
+								<td class="text-left">
+									<ul>
+									{% if definition.synonyms %}
+										{% for synonym in definition.synonyms %}
+											<li>
+												<a href = "{% url 'dictionary:word_detail' %}?word={{ synonym }}" 
+												style="color:#0055ff;">{{ synonym }}</a>
+											</li>
+										{% endfor %}
+									{% endif %}
+									</ul>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+					</table>
+				</div>
+			{% endfor %}
+			<!--Word detail-End-->
+			{% else %}
+			<div>
+				<h1>The word <span style="color:#F76C6C;">{{ word }}</span> was not found</h1>
+				<img src="{% static 'img/notfound.jpg' %}" style="height: 40%; width: 40%;">
+			</div>
+			<div>
+				{% if suggestions %}
+					<h3>Did you mean:</h3>
+					{% for suggestion in suggestions %}
+						<a href = "{% url 'dictionary:word_detail' %}?word={{ suggestion }}" style="color:#0055ff;">
+						{{ suggestion }}
+						</a>
+					{% endfor %}
+				{% endif %}
+				<br><br><br>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+	</section>
+{% endblock %}
 
-      {% if results|default_if_none:"" %}
-        {% for pos, result in results.items %}
-          <h5> {{ pos }} </h5>
-          <h5> {{ result.pronunciation }} </h5>
-          
-          <div class="word-infor" id="word-infor">
-            <table class="table-fill" style="margin-bottom: 30px;">
-              <colgroup>
-                <col width="300" >
-                <col width="300" >
-                <col width="300" >
-              </colgroup>
-        
-              <thead> 
-                <tr>
-                  <th class="text-left">Meaning</th>
-                  <th class="text-left">Example</th>
-                  <th class="text-left">Synonym</th>
-                </tr>
-              </thead>
-  
-              <tbody class="table-hover">
-                {% for definition in result.definitions %}
-                  <tr>
-                    <td class="text-left"> {{ definition.text }}</td>
+{% block script %}
+	{% if user.is_authenticated %}
+		<script>
+			const openButton = document.getElementById("open-playlist");
+			const closeButton = document.getElementById("close-playlist");
+			const popup = document.getElementById("playlist-popup");
 
-                    <td class="text-left">
-                      <ul>
-                        {% if definition.examples %}
-                          {% for example in definition.examples %}
-                            <li> {{ example }} </li>
-                          {% endfor %}
-                        {% endif %}
-                      </ul>
-                    </td>
+			openButton.addEventListener("click", function() {
+				popup.style.display = "block";
+			});
 
-                    <td class="text-left">
-                      <ul>
-                        {% if definition.synonyms %}
-                          {% for synonym in definition.synonyms %}
-                            <li><a href = "{% url 'dictionary:word_detail' %}?word={{ synonym }}" style="color:#0055ff;"> {{ synonym }}</a></li>
-                          {% endfor %}
-                        {% endif %}
-                      </ul> 
-                    </td>
-                    
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% endfor %}
-      {% else %}
-        <p> Word was not found <p>
-      {% endif %}
-    </div>
-  </div>
-</section>
+			closeButton.addEventListener("click", function() {
+				popup.style.display = "none";
+			});
+		</script>
+		{% if packages %}
+			<script>
+				const checkboxes = document.querySelectorAll('input[name="playlist"]');
+				const saveButton = document.getElementById("save-playlist");
+				saveButton.addEventListener("click", function() {
+					const url = "{% url 'workspace:package_add_word' %}";
+					const csrf_token = "{{ csrf_token }}";
+					const data = {
+						"word": "{{ word }}",
+						"packages_id": []
+					};
+					
+					checkboxes.forEach(function(checkbox) {
+						if (checkbox.checked) {
+							data["packages_id"].push(checkbox.value)
+						}
+					});
+	
+					if (data["packages_id"].length == 0) {
+						let message = document.createElement("div");
+						message.classList.add("popup-message-error", "fade-in");
+						message.innerText = "Please choose a package.";
+						document.body.appendChild(message);
+						setTimeout(function() {
+							message.remove();
+						}, 2000);
+					} else {
+						fetch(url, {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+								"X-CSRFToken": csrf_token
+							},
+							body: JSON.stringify(data)
+						}).then(response => {
+							if (response.ok) {
+								response.json().then(log => {
+									let message = document.createElement("div");
+									if (log.success) {
+										message.classList.add("popup-message-success", "fade-in");
+										message.innerText = "Success adding your word.";
+									} else {
+										message.classList.add("popup-message-error", "fade-in");
+										message.innerText = "Error adding your word.";
+									}
+									document.body.appendChild(message);
+									setTimeout(function() {
+										message.remove();
+									}, 2000);
+								});
+							} else {
+								console.error("Error:", response.statusText);
+							}
+						}).catch(error => {
+							console.error(error);
+						});
+		
+						popup.style.display = "none";
+					}
+				});
+			</script>
+		{% else %}
+			<script>
+				const createButton = document.getElementById("create-playlist");
+
+				createButton.addEventListener("click", function() {
+					window.location.href = "{% url 'workspace:package_create' %}?word={{ word }}";
+				});
+			</script>
+		{% endif %}
+	{% else %}
+		<script>
+			const openButton = document.getElementById("open-playlist");
+			openButton.addEventListener("click", function() {
+				sessionStorage.setItem("previousURL", window.location.href);
+				window.location.href = "{% url 'community:login' %}?next=" + encodeURIComponent(window.location.href);
+			});
+		</script>
+	{% endif %}
 {% endblock %}
