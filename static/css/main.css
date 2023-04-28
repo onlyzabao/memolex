@@ -1086,6 +1086,15 @@ width: 100%;
   position: relative;
 }
 
+.playlist-container a {
+  margin-left: 28px;
+  color:#F76C6C;
+}
+
+.playlist-container a:hover {
+  color:#A8D0E6;
+}
+
 .create-playlist-form {
   display: none;
   position: absolute;
