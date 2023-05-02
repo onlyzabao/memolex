@@ -88,7 +88,8 @@ DATABASES = {
         'NAME': 'memolex',
         'HOST': 'localhost',
         'USER': 'root',
-        'PASSWORD': '21020751',
+        'PASSWORD': '25012003',
+        'PORT' : '3307',
     }
 }
 
