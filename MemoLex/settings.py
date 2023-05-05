@@ -40,11 +40,11 @@ INSTALLED_APPS = [
     'dictionary',
     'workspace',
     'community',
-    'debug_toolbar',
+    # 'debug_toolbar',
 ]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,14 +82,25 @@ WSGI_APPLICATION = 'MemoLex.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'memolex',
+#         'HOST': 'localhost',
+#         'USER': 'root',
+#         'PASSWORD': '21020751',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'memolex',
-        'HOST': 'localhost',
-        'USER': 'root',
-        'PASSWORD': '21020751',
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'neondb',
+    'USER': 'onlyzabao',
+    'PASSWORD': 'VeJsv2fI5Ebz',
+    'HOST': 'ep-round-king-777106.ap-southeast-1.aws.neon.tech',
+    'PORT': '5432',
+  }
 }
 
 

@@ -8,6 +8,7 @@ django = "*"
 mysqlclient = "*"
 pillow = "*"
 pyenchant = "*"
+psycopg = {extras = ["binary", "pool"], version = "*"}
 
 [dev-packages]
 requests = "*"

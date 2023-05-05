@@ -27,7 +27,7 @@ urlpatterns = [
     path("dictionary/", include("dictionary.urls")),
     path("community/", include("community.urls")),
     path("workspace/", include("workspace.urls")),
-    path("__debug__/", include("debug_toolbar.urls")),
+    # path("__debug__/", include("debug_toolbar.urls")),
 ]
 
 if settings.DEBUG:
