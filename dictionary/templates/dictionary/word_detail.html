@@ -19,7 +19,7 @@
 			<div id="playlist-popup" class="popup">
 				<div class="popup-content">
 					<div class="popup-header">
-						<h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Add to Package</h3>
+						<h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Add to Wordpack</h3>
 					</div>
 					{% if packages %}
 						<div class="playlist-list">
@@ -41,7 +41,7 @@
 						</div>
 					{% else %}
 						<div class="playlist-blank">
-							<p>You've not had any package yet. Create a new one?</p>
+							<p>You've not had any wordpack yet. Create a new one?</p>
 						</div>
 						<div class="control-playlist">
 							<button id="close-playlist">Cancel</button>
@@ -157,7 +157,7 @@
 					if (data["packages_id"].length == 0) {
 						let message = document.createElement("div");
 						message.classList.add("popup-message-error", "fade-in");
-						message.innerText = "Please choose a package.";
+						message.innerText = "Please choose a wordpack.";
 						document.body.appendChild(message);
 						setTimeout(function() {
 							message.remove();

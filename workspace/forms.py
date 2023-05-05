@@ -13,7 +13,7 @@ class PackageForm(forms.ModelForm):
             "date":False
         }
         labels = {
-            "date":"Review Schedule"
+            "date":"Reminder"
         }
 
 class WordInlineFormSet(forms.BaseInlineFormSet):

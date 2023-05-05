@@ -1,23 +1,58 @@
 {% extends 'workspace_base.html' %}
 
-{% block content %}
+{% block title %}
+	My Wordpack
+{% endblock %}
 
-<div class="center">
-	<h2>Package List</h2>
-	{% if packages %}
-	<ul class="tasks">
-		{% for package in packages %}
-			<li><a href="{% url 'workspace:package_detail' package.id %}">{{ package.name }}</a> 
-				 <div  class="task-controls">
-				 	<a href="{% url "workspace:package_delete" package.id %}"><i class="bi bi-trash"></i> </a>
-					<a href="{% url "workspace:package_update" package.id %}"><i class="bi bi-pencil-square"></i></a>
-		         </div>
-		    </li>
-		{% endfor %}
-	{% else %}
-		<p>You have no packages! <a href="{% url "workspace:package_create" %}">Create Package</a></p>
-	{% endif %}
-	</ul>
-</div>
+{% block content %}
+	<div class="container text-center">
+		<h1 style="text-align: center; margin-bottom: 20px;">My Wordpack</h1>
+		<form method="GET" action="{% url 'workspace:package_create' %}">
+			<button type="submit" id="create-new-list">Create Wordpack</button>
+		</form>
+		<br>
+		<!--Blocks of lists-->
+		<section id="lists" class="topics pt-0">
+			<div class="container" data-aos="fade-up">
+				<div class="row gy-4">
+					{% for package in packages %}
+						<div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+							<div class="card">
+								<div class="select">
+									<input type="checkbox" name="package" value="{{ package.id }}" style="width: 15px; height: 15px; margin-right: 0px;">
+								</div>
+								<h3><a href="{% url 'workspace:package_detail' package.pk %}" class="stretched-link">{{ package.name }}</a></h3>
+								<h6>{{ package.description }}</h6>
+								<div class="rating">
+									{% for level in package.LEVEL_CHOICES %}
+										{% if level.0 > 0 %}
+											{% if package.level >= level.0 %}
+												<span class="star fas fa-star fill"></span>
+											{% else %}
+												<span class="star fas fa-star"></span>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+								</div>
+								{% comment %} <button class="right-btn">Review</button> {% endcomment %}
+								<p style="margin-bottom: 0px;"><i class="bi bi-alarm-fill"> Reminder:
+									<span style="color: #F76C6C;"> {{ package.date }} </span>
+								</i></p>
+								<p><i class="bi bi-eye-fill"> Privacy: 
+									<span style="color: #F76C6C;"> {{ package.get_privacy_display }} </span>
+								</i></p>
+							</div>
+						</div>
+						<!-- End Card Item -->
+					{% endfor %}
+				</div>
+			</div>
+		</section>
+		<!-- End Topics Section -->
+	</div>
+	<!-- End Breadcrumbs -->
+{% endblock %}
+
+{% block script %}
 
 {% endblock %}

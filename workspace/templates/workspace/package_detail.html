@@ -1,25 +1,157 @@
 {% extends 'workspace_base.html' %}
 
+{% load static %}
+
+{% block title %}
+    Wordpack Detail
+{% endblock %}
+
 {% block content %}
+    <!--ReviewPopup-Start-->
+    <div id="review-popup" class="popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Review Wordpack</h3>
+            </div>
+            <div class="text-center">
+                {% for level in package.LEVEL_CHOICES %}
+                    {% if level.0 > 0 %}
+                        {% if package.level|add:1 < level.0 %}
+                            <a style="color: #909090;" title="You have to reach level {{ level.0 }} to do this test."> Level {{ level.0 }} Test</a>
+                        {% else %}
+                            <a href="#"> Level {{ level.0 }} Test</a>
+                        {% endif %}
+                    {% endif %}
+                    <br>
+                {% endfor %}
+                <br>
+            </div>
+            <div class="control-playlist">
+                <button id="close-review-popup">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <!--ReviewPopup-End-->
+    <!--DeletePopup-Start-->
+    <div id="delete-popup" class="popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Delete Wordpack</h3>
+            </div>
+            <div class="text-center">
+                <p>Are you sure that you want to delete "{{ package }}"?</p>
+            </div>
+            <div class="control-playlist">
+                <button id="close-delete-popup">Cancel</button>
+                <button id="confirm-delete-popup">Delete</button>
+            </div>
+        </div>
+    </div>
+    <!--DeletePopup-End-->
+    <div class="container text-center">
+        <h1>{{ package.name }}</h1>
+        <h4>{{ package.description }}</h4>
+        <div class="rating" title="Level {{ package.level }}: {{ package.get_level_display }}">
+            {% for level in package.LEVEL_CHOICES %}
+                {% if level.0 > 0 %}
+                    {% if package.level >= level.0 %}
+                        <span class="star fas fa-star fill"></span>
+                    {% else %}
+                        <span class="star fas fa-star"></span>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <h5 style="color: #ffffff;"><i class="bi bi-alarm-fill"> Reminder:
+            <span style="color: #F76C6C;"> {{ package.date }} </span>
+        </i></h5>
+        <h5 style="color: #ffffff;"><i class="bi bi-eye-fill"> Privacy: 
+            <span style="color: #F76C6C;"> {{ package.get_privacy_display }} </span>
+        </i></h5>
+        <br>
 
-<h1>{{ package.name }}</h1>
-    <p>{{ package.description }}</p>
-    <p>Privacy: {{ package.get_privacy_display }}</p>
-    {% if package.date %}
-        <p>Review Date: {{ package.get_date_display }}</p>
-    {% else %}
-        <p>Review Date: Not Planned</p>
-    {% endif %}
-    <p>Progress: {{ package.progress }}</p>
-    <p>Level: {{ package.get_level_display }}</p>
+        <table class="table-fill">
+            <colgroup>
+                <col width="50">
+                <col width="300">
+                <col width="300">
+            </colgroup>
+            
+            <thead> 
+                <tr>
+                    <th class="text-center">
+                        <div style="display: flex; justify-content: center; width: auto;">
+                            <button id="create-new-list"><i class="bi bi-pencil-square" title="Edit"></i></button>
+                            <button id="review-list"><i class="bi bi-book" title="Review"></i></button>
+                            <button id="delete-list"><i class="bi bi-trash" title="Delete"></i></button>
+                        </div>
+                    </th>
+                    <th class="text-center">Word</th>
+                    <th class="text-center">Progress</th>
+                </tr>
+            </thead>
+            
+            <tbody class="table-hover">
+                {% if package.has_words %}
+                    {% for word in package.word_set.all %}
+                        <tr onclick="window.location='{% url "dictionary:word_detail" %}?word={{ word.spelling }}';" style="cursor: pointer;">
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td class="text-center">{{ word.spelling }}</td>
+                            <td class="text-center">
+                                <div class="progress-bar">
+                                    <span class="progress-percent">{{ word.progress }} %</span>
+                                    <div class="progress-bar-inner" style="width: {{ word.progress }}%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}            
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <p>Your wordpack is empty. Please add more words to learn.</p>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
 
-    <h2>Words</h2>
-    <ul>
-        {% for word in package.word_set.all %}
-        <li>{{ word.spelling }}</li>
-        {% empty %}
-        <li>No words found.</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url "workspace:package_list" %}">Package List</a>
+{% block script %}
+    <script>
+        const editBtn = document.getElementById("create-new-list");
+
+        editBtn.addEventListener("click", function() {
+            window.location="{% url 'workspace:package_update' package.pk %}"
+        });
+
+        const reviewPopup = document.getElementById("review-popup");
+        const openReviewPopupBtn = document.getElementById("review-list");
+        const closeReviewPopupBtn = document.getElementById("close-review-popup");
+
+        openReviewPopupBtn.addEventListener("click", function() {
+            reviewPopup.style.display = "block";
+        });
+
+        closeReviewPopupBtn.addEventListener("click", function() {
+            reviewPopup.style.display = "none";
+        });
+
+        const delPopup = document.getElementById("delete-popup");
+        const openDelPopupBtn = document.getElementById("delete-list");
+        const closeDelPopupBtn = document.getElementById("close-delete-popup");
+        const delBtn = document.getElementById("confirm-delete-popup");
+
+        openDelPopupBtn.addEventListener("click", function() {
+            delPopup.style.display = "block";
+        });
+
+        closeDelPopupBtn.addEventListener("click", function() {
+            delPopup.style.display = "none";
+        });
+
+        delBtn.addEventListener("click", function() {
+            window.location="{% url 'workspace:package_delete' package.pk %}"
+        });
+    </script>
 {% endblock %}

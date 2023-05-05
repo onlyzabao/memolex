@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -10,7 +11,9 @@ from django.forms import inlineformset_factory
 from django.http import JsonResponse
 from .models import Package, Word
 from .forms import PackageForm, WordForm, WordInlineFormSet
+from .utilities import SpellingTest
 import json
+import random
 
 
 # Create your views here.
@@ -132,24 +135,19 @@ class PackageUpdateView(LoginRequiredMixin, View):
             context = {"package_form":package_form, "word_formset":word_formset}
 
             return render(request, "workspace/package_form.html", context)
-        
-class PackageDeleteView(LoginRequiredMixin, DeleteView):
-    model = Package
-    context_object_name = "package"
-    template_name = "workspace/package_delete.html"
-    success_url = reverse_lazy("workspace:package_list")
+    
+class PackageDeleteView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        package = get_object_or_404(Package, pk=pk)
+        words = Word.objects.filter(package=package)
 
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        words = Word.objects.filter(package=self.object)
         words.delete()
-        return super().delete(self, request, *args, **kwargs)    
+        package.delete()
+
+        messages.success(request, "Your package was deleted successfully.")
+        return redirect(reverse_lazy("workspace:package_list"))
     
-    def form_valid(self, form):
-        messages.success(self.request, "Your package was deleted successfully.")
-        return super(PackageDeleteView, self).form_valid(form)
-    
-class PackageAddWordView(LoginRequiredMixin, View):
+class AddWordView(LoginRequiredMixin, View):
     def post(self, request):
         status = False
         data = json.loads(request.body)
@@ -168,3 +166,13 @@ class PackageAddWordView(LoginRequiredMixin, View):
         response = {"success": status}
 
         return JsonResponse(response)
+    
+class ReviewSpellingView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        words = Word.objects.filter(Q(package__id=pk) & ~Q(progress=100))[:10]
+
+        questions = SpellingTest.generate(words)
+
+        context = {"questions": questions}
+
+        return render(request, "workspace/review_spelling.html", context)

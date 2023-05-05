@@ -12,7 +12,6 @@ class Package(models.Model):
     description = models.TextField(max_length=255, blank=True, null=True)
     # Attribute
     date = models.DateField(blank=True, null=True)
-    progress = models.SmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     LEVEL_CHOICES = [
         (0, 'Not started'),
         (1, 'Remembered'),
@@ -28,6 +27,9 @@ class Package(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def has_words(self):
+        return self.word_set.exists()
 
 class Word(models.Model):
     # Foreign Key

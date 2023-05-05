@@ -1,6 +1,6 @@
 import requests
 
-class WordsAPI():
+class WordsAPI:
     @staticmethod
     def request(word, type):
         if type == "everything":
