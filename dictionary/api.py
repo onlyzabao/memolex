@@ -52,7 +52,17 @@ class WordsAPI:
     def clean_for_definitions(data):
         results = {}
         if "definitions" in data:
-            results["definitions"] = data["definitions"]
+            if len(data["definitions"]) != 0:
+                results["definitions"] = data["definitions"]
+
+        return results
+    
+    @staticmethod
+    def clean_for_synonyms(data):
+        results = {}
+        if "synonyms" in data:
+            if len(data["synonyms"]) != 0:
+                results["synonyms"] = data["synonyms"]
 
         return results
 
@@ -66,5 +76,7 @@ class WordsAPI:
                 results = WordsAPI.clean_for_everything(data)
             elif type == "definitions":
                 results = WordsAPI.clean_for_definitions(data)
+            elif type == "synonyms":
+                results = WordsAPI.clean_for_synonyms(data)
 
         return results

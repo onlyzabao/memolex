@@ -1060,6 +1060,12 @@ td.text-right {
   background-color: white;
   border: 2px solid ;
   border-radius: 20px;
+  margin: 0 auto;
+}
+
+.wrapper p {
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 section.word-detail {
@@ -1625,6 +1631,8 @@ input[type="checkbox"] {
 
 .swiper-slide p {
   margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
   font-size: 25px;
 }
 
@@ -1662,9 +1670,9 @@ input[type="checkbox"] {
 }
 
 .answer-row button {
-  width: 300px;
-  height: 100px;
-  margin: 30px;
+  width: 200px;
+  height: 50px;
+  margin: 15px;
   background-color: white;
   color: black;
   border: 1px solid black;
@@ -1708,6 +1716,7 @@ input[type="checkbox"] {
   margin-right: 20px;
   margin-left: 20px;
   border-radius: 5px;
+  align-items: center;
 }
 
 .exit:hover, .submit-button:hover{

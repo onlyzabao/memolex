@@ -9,6 +9,7 @@ mysqlclient = "*"
 pillow = "*"
 pyenchant = "*"
 psycopg = {extras = ["binary", "pool"], version = "*"}
+random-word = "*"
 
 [dev-packages]
 requests = "*"

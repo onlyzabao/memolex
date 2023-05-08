@@ -15,15 +15,6 @@
                     <div class="key text-center">
                         <h2>Question {{ forloop.counter }}</h2>
                         <p>{{ question }}</p>
-                        
-                        <!--
-                        <div class="answer-row-res">
-                            <button class="answerA">A. Answer 1</button>
-                            <button class="answerB">B. Answer 2</button>
-                            <button class="answerC">C. Answer 3</button>
-                            <button class="answerD">D. Answer 4</button>
-                        </div>
-                        -->
                         {% if result %}
                             <div class="fill-res">
                                 <div class="userans" style="border: 2px solid rgba(0, 255, 4, 0.3);">
@@ -42,10 +33,10 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-
-                <br>
-                <div class="exit" id="exit-btn">Exit</div>
             </div>
+            <br>
+            <div class="exit" id="exit-btn" style="margin-right: auto; margin-left: auto;">Exit</div>
+            <br>
         </div>
     </div>
 {% endblock %}

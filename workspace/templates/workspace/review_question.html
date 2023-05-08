@@ -1,26 +1,20 @@
 <div class="word text-center">
     <h1 style="color: #000000; font-family: 'Inter', sans-serif; font-weight: 700;padding-top: 30px;">
     </h1>
-    <h4>Guess the word by its definition</h4>
-    <p>{{ question.text }}</p>
-    {% comment %} <p>{{ question.key }}</p> {% endcomment %}
     
-    <!--Multiple choice
-
-    <div class="answer-row">
-        <div class="answer-col">
-        <button id="answer-1">A. Answer 1</button>
-        <button id="answer-2">B. Answer 2</button>
-        </div>
-        <div class="answer-col">
-        <button id="answer-3">C. Answer 3</button>
-        <button id="answer-4">D. Answer 4</button>
-        </div>
-    </div>
-
-    -->
+    {% if not question.choices %}
+        <h4>Guess the word by its definition</h4>
+        <p>{{ question.text }}</p>
+        <input type="text" name="answers" class="type_answer" align="center" placeholder="Your answer">
+    {% else %}
+        <h4>Choose the synonym of the word</h4>
+        <p>{{ question.text }}</p>
+        {% for choice in question.choices %}
+            <input type="radio" name="" value="{{ choice }}">{{ choice }}</input>
+            <br>
+        {% endfor %}
+    {% endif %}
     <input type="hidden" name="questions" value="{{ question.text }}">
     <input type="hidden" name="keys" value="{{ question.key }}">
     <input type="hidden" name="coeffs" value="{{ question.coeff }}">
-    <input type="text" name="answers" class="type_answer" align="center" placeholder="Your answer">
 </div>

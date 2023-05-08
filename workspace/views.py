@@ -172,39 +172,53 @@ class PackageReviewView(LoginRequiredMixin, View):
         words = list(Word.objects.filter(Q(package__id=pk) & ~Q(progress=100))[:10])
         shuffle(words)
 
-        meta = {
-            "level": level,
-            "package": pk
+        context = {
+            "meta": {
+                "level": level,
+                "package": pk
+            }, 
+            "words": words
         }
-
-        context = {"meta": meta, "words": words}
 
         return render(request, "workspace/review_test.html", context)
     
     def post(seft, request, level, pk):
+        print(request.POST)
         questions = request.POST.getlist("questions")
         keys = request.POST.getlist("keys")
-        answers = request.POST.getlist("answers")
         coeffs = request.POST.getlist("coeffs")
+        answers = request.POST.getlist("answers")
         
-        test_len = len(questions)
         mark = 0
-        results = [False] * test_len
+        testLen = len(questions)        
+        results = [False] * testLen
 
-        for i in range(test_len):
-            if answers[i] == keys[i]:
+        for i in range(testLen):
+            if level == 1:
+                answer = answers[i]
+                word = Word.objects.get(Q(package__id=pk) & Q(spelling=keys[i]))
+            elif level == 2:
+                answer = request.POST.get(questions[i])
+                answers.append(answer)
+                word = Word.objects.get(Q(package__id=pk) & Q(spelling=questions[i]))
+
+            if answer == keys[i]:
                 results[i] = True
                 mark += 1
-                word = Word.objects.get(Q(package__id=pk) & Q(spelling=keys[i]))
+
                 word.progress += math.ceil(100 / int(coeffs[i]))
                 if word.progress > 100:
                     word.progress = 100
                 word.save()
-        
-        if Word.objects.filter(package__id=pk).exclude(progress=100).count() == 0:
+
+        words = Word.objects.filter(package__id=pk)
+        if words.exclude(progress=100).count() == 0:
             package = Package.objects.get(id=pk)
-            package.level += 1
-            package.save()
+            if package.level < 3:
+                package.level += 1
+                package.save()
+            
+            words.update(progress=0)
         
         test = list(zip(questions, keys, answers, results))
 
@@ -225,15 +239,9 @@ class TestGenerateView(LoginRequiredMixin, View):
         word = request.GET.get("word")
         progress = request.GET.get("progress")
 
+        question = {}
         if level and word and progress:
-            if level == "1":
-                question = Test.spelling_test_generate(word, int(progress))
-            elif level == "2":
-                question = Test.definition_test_generate(word, int(progress))
-            else:
-                question = Test.synonym_test_generate(word, int(progress))
-        else:
-            question = {}
+            question = Test.generate(int(level), word, int(progress))
 
         context = {
             "question": question
@@ -247,8 +255,6 @@ class QuestionDisplayView(LoginRequiredMixin, View):
 
         if question:
             question = json.loads(question)
-        else:
-            question = {}
 
         context = {
             "question": question

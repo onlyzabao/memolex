@@ -54,16 +54,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        const buttons = document.querySelectorAll('button');
-
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-            buttons.forEach(otherButton => otherButton.classList.remove('selected'));
-            button.classList.add('selected');
-            const selectedAnswer = button.id.replace('answer-', '');
-            });
-        });
-
         //EXIT BUTTON
         const exitButton = document.getElementById("exit-btn");
         const exitPopup = document.getElementById("exitPopup");
@@ -123,6 +113,7 @@
                         $.get("{% url 'workspace:question_display' %}", {question: JSON.stringify(question)}, function(data) {
                             $(this).append(data);
                             $(this).find("h1").text("Question " + (index + 1));
+                            $(this).find("input[type='radio']").attr("name", word);
                         }.bind(this));
                     }.bind(this)
                 });
