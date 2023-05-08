@@ -14,16 +14,21 @@
                 <h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Review Wordpack</h3>
             </div>
             <div class="text-center">
-                {% for level in package.LEVEL_CHOICES %}
-                    {% if level.0 > 0 %}
-                        {% if package.level|add:1 < level.0 %}
-                            <a style="color: #909090;" title="You have to reach level {{ level.0 }} to do this test."> Level {{ level.0 }} Test</a>
-                        {% else %}
-                            <a href="#"> Level {{ level.0 }} Test</a>
+                {% if package.total_words > 1 %}
+                    {% for level in package.LEVEL_CHOICES %}
+                        {% if level.0 > 0 %}
+                            {% if package.level|add:1 == level.0 %}
+                                <a href="{% url 'workspace:package_review' level.0 package.pk %}"> Level {{ level.0 }} Test</a>
+                            {% else %}
+                                <a style="color: #909090;" title="You have to reach level {{ level.0 }} to do this test."> Level {{ level.0 }} Test</a>
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
+                        <br>
+                    {% endfor %}
+                {% else %}
                     <br>
-                {% endfor %}
+                    <p>Make sure your wordpack has at least 2 words to do this.</p>
+                {% endif %}
                 <br>
             </div>
             <div class="control-playlist">

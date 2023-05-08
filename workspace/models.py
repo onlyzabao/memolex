@@ -30,6 +30,9 @@ class Package(models.Model):
     
     def has_words(self):
         return self.word_set.exists()
+    
+    def total_words(self):
+        return self.word_set.count()
 
 class Word(models.Model):
     # Foreign Key

@@ -1,0 +1,132 @@
+{% extends "workspace_base.html" %}
+
+{% block title %}
+    Review
+{% endblock %}
+
+{% block content %}
+    <form id="questions-form" method="POST" action="{% url 'workspace:package_review' meta.level meta.package %}">
+        {% csrf_token %}
+        <div class="swiper-container">
+            <div id="questions-container" class="swiper-wrapper">
+                {% for word in words %}
+                    <div class="swiper-slide">
+                        <div class="quizz question-container" data-word="{{ word.spelling }}" data-progress="{{ word.progress }}">
+                            
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="answer-btn">
+                <div class="exit" id="exit-btn">Exit</div>
+                <div class="submit-button" id="submit-btn">Submit</div>
+            </div>
+
+            
+            <div id="submitPopup" class="popup">
+                <div class="popup-content text-center">
+                    <h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Submit</h3>
+                    <p>Are you sure you want to submit? <p>
+                        <div class="answer-btn">
+                            <button id="submit-no-btn" class="no-btn">No</button>
+                            <button type="submit" value="Submit" id="submit-yes-btn" class="yes-btn">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div id="exitPopup" class="popup">
+            <div class="popup-content text-center">
+                <h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Exit</h3>
+                <p>Are you sure you want to exit? <p>
+                <div class="answer-btn">
+                    <button id="exit-no-btn" class="no-btn">No</button>
+                    <button id="exit-yes-btn" class="yes-btn" onclick="window.location.href='{% url "workspace:package_detail" meta.package %}'">Yes</button>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        const buttons = document.querySelectorAll('button');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+            buttons.forEach(otherButton => otherButton.classList.remove('selected'));
+            button.classList.add('selected');
+            const selectedAnswer = button.id.replace('answer-', '');
+            });
+        });
+
+        //EXIT BUTTON
+        const exitButton = document.getElementById("exit-btn");
+        const exitPopup = document.getElementById("exitPopup");
+        const closeExitPopupBtn = document.getElementById("exit-no-btn");
+
+        exitButton.addEventListener("click", function() {
+            exitPopup.style.display = "block";
+        });
+
+        closeExitPopupBtn.addEventListener("click", function() {
+            exitPopup.style.display = "none";
+        });
+
+        // SUBMIT BUTTON
+        const submitButton = document.getElementById("submit-btn");
+        const submitPopup = document.getElementById("submitPopup");
+        const closeSubmitPopupBtn = document.getElementById("submit-no-btn");
+
+        submitButton.addEventListener("click", function() {
+            submitPopup.style.display = "block";
+        });
+
+        closeSubmitPopupBtn.addEventListener("click", function() {
+            event.preventDefault();
+            submitPopup.style.display = "none";
+        });
+
+        // SWIPER
+        var swiper = new Swiper('.swiper-container', {
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+                disabledClass: 'swiper-button-disabled'
+            },
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            const totalQuestions = parseInt($('.swiper-slide[aria-label]').last().attr('aria-label').split(' / ')[1]);
+        
+            $('.question-container').each(function(index) {
+                var word = $(this).data('word');
+                var progress = $(this).data('progress');
+        
+                // Make AJAX request to load question
+                $.ajax({
+                    url: "{% url 'workspace:test_generate' %}",
+                    data: {
+                        "level": {{ meta.level }},
+                        "word": word,
+                        "progress": progress
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        var question = data.question;
+                        $.get("{% url 'workspace:question_display' %}", {question: JSON.stringify(question)}, function(data) {
+                            $(this).append(data);
+                            $(this).find("h1").text("Question " + (index + 1));
+                        }.bind(this));
+                    }.bind(this)
+                });
+            });
+        });
+    </script>
+{% endblock %}

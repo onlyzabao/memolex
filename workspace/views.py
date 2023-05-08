@@ -2,18 +2,18 @@ from django.db.models import Q
 from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from .models import Package, Word
 from .forms import PackageForm, WordForm, WordInlineFormSet
-from .utilities import SpellingTest
+from .utilities import Test
+from random import shuffle
 import json
-import random
+import math
 
 
 # Create your views here.
@@ -167,12 +167,91 @@ class AddWordView(LoginRequiredMixin, View):
 
         return JsonResponse(response)
     
-class ReviewSpellingView(LoginRequiredMixin, View):
-    def get(self, request, pk):
-        words = Word.objects.filter(Q(package__id=pk) & ~Q(progress=100))[:10]
+class PackageReviewView(LoginRequiredMixin, View):
+    def get(self, request, level, pk):
+        words = list(Word.objects.filter(Q(package__id=pk) & ~Q(progress=100))[:10])
+        shuffle(words)
 
-        questions = SpellingTest.generate(words)
+        meta = {
+            "level": level,
+            "package": pk
+        }
 
-        context = {"questions": questions}
+        context = {"meta": meta, "words": words}
 
-        return render(request, "workspace/review_spelling.html", context)
+        return render(request, "workspace/review_test.html", context)
+    
+    def post(seft, request, level, pk):
+        questions = request.POST.getlist("questions")
+        keys = request.POST.getlist("keys")
+        answers = request.POST.getlist("answers")
+        coeffs = request.POST.getlist("coeffs")
+        
+        test_len = len(questions)
+        mark = 0
+        results = [False] * test_len
+
+        for i in range(test_len):
+            if answers[i] == keys[i]:
+                results[i] = True
+                mark += 1
+                word = Word.objects.get(Q(package__id=pk) & Q(spelling=keys[i]))
+                word.progress += math.ceil(100 / int(coeffs[i]))
+                if word.progress > 100:
+                    word.progress = 100
+                word.save()
+        
+        if Word.objects.filter(package__id=pk).exclude(progress=100).count() == 0:
+            package = Package.objects.get(id=pk)
+            package.level += 1
+            package.save()
+        
+        test = list(zip(questions, keys, answers, results))
+
+        context = {
+            "meta": {
+                "level": level,
+                "package": pk
+            },
+            "mark": mark,
+            "test": test
+        }
+
+        return render(request, "workspace/review_result.html", context)
+    
+class TestGenerateView(LoginRequiredMixin, View):
+    def get(self, request):
+        level = request.GET.get("level")
+        word = request.GET.get("word")
+        progress = request.GET.get("progress")
+
+        if level and word and progress:
+            if level == "1":
+                question = Test.spelling_test_generate(word, int(progress))
+            elif level == "2":
+                question = Test.definition_test_generate(word, int(progress))
+            else:
+                question = Test.synonym_test_generate(word, int(progress))
+        else:
+            question = {}
+
+        context = {
+            "question": question
+        }
+
+        return JsonResponse(context)
+    
+class QuestionDisplayView(LoginRequiredMixin, View):
+    def get(self, request):
+        question = request.GET.get("question")
+
+        if question:
+            question = json.loads(question)
+        else:
+            question = {}
+
+        context = {
+            "question": question
+        }
+
+        return render(request, "workspace/review_question.html", context)

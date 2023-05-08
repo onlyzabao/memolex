@@ -1,20 +1,24 @@
+from dictionary.api import WordsAPI
 import random
 import math
 
-class SpellingTest:
-    def generate(words):
-        questions = []
-        for word in words:
-            word_len = len(word.spelling)
-            num_blanks =  math.ceil(word_len / 3)
-            blank_indices = random.sample(range(word_len), num_blanks)
-            key = word.spelling
-            text = ""
-            for i in range(word_len):
-                if i in blank_indices:
-                    text += "_"
-                else:
-                    text += word.spelling[i]
-            questions.append({"text":text, "key":key})
+class Test:
+    def spelling_test_generate(word, progress):
+        question = {}
+        definition = ""
 
-        return questions
+        results = WordsAPI.get(word, type="definitions")
+        if results:
+            definitionNum = len(results["definitions"])
+            definition = results["definitions"][math.floor((definitionNum * progress) / 100)]
+
+        question = {"text":definition["definition"], "key":word, "coeff": definitionNum}
+
+        return question
+    
+    def definition_test_generate(word, progress):
+        
+        return
+    
+    def synonym_test_generate(word, progress):
+        return

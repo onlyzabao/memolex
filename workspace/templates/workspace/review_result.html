@@ -1,0 +1,61 @@
+{% extends "workspace_base.html" %}
+
+{% block title %}
+    Result
+{% endblock %}
+
+{% block content %}
+    <div style="justify-content: center; align-items: center;">
+        <div class="wrapper">
+            <div class = "word text-center"> 
+                <h1 style="color: #000000; font-family: 'Inter', sans-serif; font-weight: 700;padding-top: 30px;">Result</h1> 
+                <h5>Mark: {{ mark }}/{{ test|length }}</h5>
+                
+                {% for question, key, answer, result in test %}
+                    <div class="key text-center">
+                        <h2>Question {{ forloop.counter }}</h2>
+                        <p>{{ question }}</p>
+                        
+                        <!--
+                        <div class="answer-row-res">
+                            <button class="answerA">A. Answer 1</button>
+                            <button class="answerB">B. Answer 2</button>
+                            <button class="answerC">C. Answer 3</button>
+                            <button class="answerD">D. Answer 4</button>
+                        </div>
+                        -->
+                        {% if result %}
+                            <div class="fill-res">
+                                <div class="userans" style="border: 2px solid rgba(0, 255, 4, 0.3);">
+                                    <h5>Your answer: {{ answer }}</h5>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="fill-res">
+                                <div class="userans" style="border: 2px solid rgba(255, 0, 0, 0.3);">
+                                    <h5>Your answer: {{ answer }}</h5>
+                                </div>
+                            </div>
+                            <div class="right-ans">
+                                <h5>Correct answer: {{ key }}</h5>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <br>
+                <div class="exit" id="exit-btn">Exit</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        const exitButton = document.getElementById("exit-btn");
+
+        exitButton.addEventListener("click", function() {
+            window.location.href="{% url 'workspace:package_detail' meta.package %}";
+        });
+    </script>
+{% endblock %}

@@ -48,6 +48,13 @@ class WordsAPI:
 
         return results
 
+    @staticmethod
+    def clean_for_definitions(data):
+        results = {}
+        if "definitions" in data:
+            results["definitions"] = data["definitions"]
+
+        return results
 
     @staticmethod
     def get(word, type="everything"):
@@ -57,5 +64,7 @@ class WordsAPI:
             data = response.json()
             if type == "everything":
                 results = WordsAPI.clean_for_everything(data)
+            elif type == "definitions":
+                results = WordsAPI.clean_for_definitions(data)
 
         return results
