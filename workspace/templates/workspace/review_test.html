@@ -12,7 +12,11 @@
                 {% for word in words %}
                     <div class="swiper-slide">
                         <div class="quizz question-container" data-word="{{ word.spelling }}" data-progress="{{ word.progress }}">
-                            
+                            <!--loading sipnner here-->
+                            <div class="spinner-container">
+                                <i class="fas fa-spinner fa-spin fa-3x"></i>
+                                <h2>Loading...</h2>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -108,6 +112,10 @@
                         "progress": progress
                     },
                     dataType: "json",
+                    beforeSend: function() {
+                        // Show spinner before AJAX request is sent
+                        $(this).find('.spinner-container').show();
+                    }.bind(this),
                     success: function(data) {
                         var question = data.question;
                         $.get("{% url 'workspace:question_display' %}", {question: JSON.stringify(question)}, function(data) {
@@ -115,6 +123,10 @@
                             $(this).find("h1").text("Question " + (index + 1));
                             $(this).find("input[type='radio']").attr("name", word);
                         }.bind(this));
+                    }.bind(this),
+                    complete: function() {
+                        // Hide spinner after AJAX request is complete (whether success or error)
+                        $(this).find('.spinner-container').hide();
                     }.bind(this)
                 });
             });
