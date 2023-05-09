@@ -9,10 +9,19 @@
     {% else %}
         <h4>Choose the synonym of the word</h4>
         <p>{{ question.text }}</p>
-        {% for choice in question.choices %}
-            <input type="radio" name="" value="{{ choice }}">{{ choice }}</input>
-            <br>
-        {% endfor %}
+        
+        <div class="row" style="width: 700px; margin: 0 auto; text-align: left;">
+            {% for choice in question.choices %}
+            <div class="col-md-6">
+                <label class="radio-button-container" disabled> {{choice}}
+                    <input type="radio" name="radio" value="{{choice}}">
+                    <span class="checkmark"></span>
+                </label>
+
+            </div>
+            {% endfor %}
+        </div>
+        
     {% endif %}
     <input type="hidden" name="questions" value="{{ question.text }}">
     <input type="hidden" name="keys" value="{{ question.key }}">
