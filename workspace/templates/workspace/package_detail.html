@@ -79,6 +79,16 @@
         </i></h5>
         <br>
 
+        <div class="taskbar">
+            <i class="bi bi-three-dots-vertical"></i>
+                <button id="edit-list"><i class="bi bi-pencil-square" title="Edit"></i> Edit</button>
+            <i class="bi bi-three-dots-vertical"></i>
+                <button id="review-list"><i class="bi bi-book" title="Review"></i> Review</button>
+            <i class="bi bi-three-dots-vertical"></i>
+                <button id="delete-list"><i class="bi bi-trash" title="Delete"></i> Delete</button>
+            <i class="bi bi-three-dots-vertical"></i>
+        </div>
+
         <table class="table-fill">
             <colgroup>
                 <col width="50">
@@ -88,13 +98,7 @@
             
             <thead> 
                 <tr>
-                    <th class="text-center">
-                        <div style="display: flex; justify-content: center; width: auto;">
-                            <button id="create-new-list"><i class="bi bi-pencil-square" title="Edit"></i></button>
-                            <button id="review-list"><i class="bi bi-book" title="Review"></i></button>
-                            <button id="delete-list"><i class="bi bi-trash" title="Delete"></i></button>
-                        </div>
-                    </th>
+                    <th class="text-center">SSN</th>
                     <th class="text-center">Word</th>
                     <th class="text-center">Progress</th>
                 </tr>
@@ -128,7 +132,7 @@
 
 {% block script %}
     <script>
-        const editBtn = document.getElementById("create-new-list");
+        const editBtn = document.getElementById("edit-list");
 
         editBtn.addEventListener("click", function() {
             window.location="{% url 'workspace:package_update' package.pk %}"

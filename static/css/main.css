@@ -1298,49 +1298,6 @@ input[type="checkbox"] {
   text-align: center;
 }
 
-#create-new-list {
-  margin-left: 10px;
-  border-radius: 5px;
-  font-size: 20px;
-  background-color: #A8D0E6;
-  border-color: #A8D0E6;
-}
-
-#create-new-list:hover {
-  background-color: #F76C6C;
-  color: white;
-  border-color: #F76C6C;
-}
-
-#review-list {
-  margin-left: 10px;
-  border-radius: 5px;
-  font-size: 20px;
-  background-color: #A8D0E6;
-  border-color: #A8D0E6;
-}
-
-#review-list:hover {
-  background-color: #F76C6C;
-  color: white;
-  border-color: #F76C6C;
-}
-
-#delete-list {
-  margin-left: 10px;
-  border-radius: 5px;
-  font-size: 20px;
-  background-color: #A8D0E6;
-  border-color: #A8D0E6;
-}
-
-#delete-list:hover {
-  background-color: #F76C6C;
-  color: white;
-  border-color: #F76C6C;
-}
-
-
 #create-list {
   margin-left: 10px;
   border-radius: 5px;
@@ -1916,6 +1873,7 @@ input[type="checkbox"] {
   border-radius: 10px;
   margin: 0 auto;
   margin-top: 20px;
+  margin-bottom: 20px;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -1924,19 +1882,19 @@ input[type="checkbox"] {
   opacity: 60%;
 }
 
-.public-private, .date-picker, .sort-mode, .create-btn, .delete-btn {
+.public-private, .date-picker, .sort-mode, .create-btn, .delete-btn, #review-list, #delete-list, #edit-list {
   /* margin-right: 10px; */
   border: none;
   background-color: transparent;
   font-size: 20px;
 }
 
-.public-private:hover, .date-picker:hover, .sort-mode:hover, .create-btn:hover, .delete-btn:hover {
+.public-private:hover, .date-picker:hover, .sort-mode:hover, .create-btn:hover, .delete-btn:hover, #review-list:hover, #delete-list:hover, #edit-list:hover {
   scale: 1.1;
   font-weight: 600;
 }
 
-.public-private:focus, .date-picker:focus, .sort-mode:focus, .create-btn:active, .delete-btn:focus {
+.public-private:focus, .date-picker:focus, .sort-mode:focus, .create-btn:active, .delete-btn:focus, #review-list:focus, #delete-list:focus, #edit-list:focus {
   scale: 1.1;
   font-weight: 600;
 }
