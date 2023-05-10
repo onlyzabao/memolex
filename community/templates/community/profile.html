@@ -24,7 +24,8 @@
                 <input type="email" id="email" name="email" value="{{ user.email }}" />
 
                 <label for="bio">Bio:</label>
-                <input type="bio" id="bio" name="bio" value="{{ user.profile.bio }}" />
+                <textarea id="bio" name="bio" style="height: 150px;">{{ user.profile.bio }}</textarea>
+
                 
                 <label for="avatar">Avatar:</label>
                 <div style="text-align: center; margin-bottom: 20px;">
