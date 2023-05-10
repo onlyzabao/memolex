@@ -79,15 +79,17 @@
         </i></h5>
         <br>
 
-        <div class="taskbar">
-            <i class="bi bi-three-dots-vertical"></i>
-                <button id="edit-list"><i class="bi bi-pencil-square" title="Edit"></i> Edit</button>
-            <i class="bi bi-three-dots-vertical"></i>
-                <button id="review-list"><i class="bi bi-book" title="Review"></i> Review</button>
-            <i class="bi bi-three-dots-vertical"></i>
-                <button id="delete-list"><i class="bi bi-trash" title="Delete"></i> Delete</button>
-            <i class="bi bi-three-dots-vertical"></i>
-        </div>
+        {% if request.user == meta.user %}
+            <div class="taskbar">
+                <i class="bi bi-three-dots-vertical"></i>
+                    <button id="edit-list"><i class="bi bi-pencil-square" title="Edit"></i> Edit</button>
+                <i class="bi bi-three-dots-vertical"></i>
+                    <button id="review-list"><i class="bi bi-book" title="Review"></i> Review</button>
+                <i class="bi bi-three-dots-vertical"></i>
+                    <button id="delete-list"><i class="bi bi-trash" title="Delete"></i> Delete</button>
+                <i class="bi bi-three-dots-vertical"></i>
+            </div>
+        {% endif %}
 
         <table class="table-fill">
             <colgroup>

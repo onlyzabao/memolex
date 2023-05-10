@@ -43,21 +43,23 @@
 	</div>
 	<!--DeletePopup-End-->
 	<div class="container text-center">
-		<div class="taskbar">
-			<i class="bi bi-three-dots-vertical"></i>
-				<form method="GET" action="{% url 'workspace:package_create' %}">
-					<button class="create-btn" type="submit">Create new pack</button>
-				</form>
-			<i class="bi bi-three-dots-vertical"></i>
-				<button type="submit" class="delete-btn" id="delete-packakges">Delete selected packs</button>
-			<i class="bi bi-three-dots-vertical"></i>
-				<select class="sort-mode">
-					<option value="" disabled selected>Sort packs</option>
-					<option value="created_date">Date</option>
-					<option value="rating">Rating</option>
-				</select>
-			<i class="bi bi-three-dots-vertical"></i>
-		</div>
+		{% if request.user == meta.user %}
+			<div class="taskbar">
+				<i class="bi bi-three-dots-vertical"></i>
+					<form method="GET" action="{% url 'workspace:package_create' %}">
+						<button class="create-btn" type="submit">Create new pack</button>
+					</form>
+				<i class="bi bi-three-dots-vertical"></i>
+					<button type="submit" class="delete-btn" id="delete-packakges">Delete selected packs</button>
+				<i class="bi bi-three-dots-vertical"></i>
+					<select class="sort-mode" id="sort-select">
+						<option value="" disabled selected>Sort packs</option>
+						<option value="date">Remind Date</option>
+						<option value="level">Level</option>
+					</select>
+				<i class="bi bi-three-dots-vertical"></i>
+			</div>
+		{% endif %}
 		<br>
 		<!--Blocks of lists-->
 		<section id="lists" class="topics pt-0" style="margin-top: 0px; ">
@@ -66,10 +68,16 @@
 					{% for package in packages %}
 						<div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
 							<div class="card">
-								<div class="select">
-									<input form="package-delete-form" type="checkbox" name="pk" value="{{ package.id }}" style="width: 20px; height: 20px; margin-right: 0px;">
-								</div>
-								<h3><a href="{% url 'workspace:package_detail' package.pk %}" class="stretched-link">{{ package.name }}</a></h3>
+
+								{% if request.user == meta.user %}
+									<div class="select">
+										<input form="package-delete-form" type="checkbox" name="pk" value="{{ package.id }}" style="width: 20px; height: 20px; margin-right: 0px;">
+									</div>
+									<h3><a href="{% url 'workspace:package_detail' package.pk %}" class="stretched-link">{{ package.name }}</a></h3>
+								{% else %}
+									<h3><a href="{% url 'workspace:package_detail' package.pk %}?userID={{ meta.user.id }}" class="stretched-link">{{ package.name }}</a></h3>
+								{% endif %}
+
 								<h6>{{ package.description }}</h6>
 								<div class="rating">
 									{% for level in package.LEVEL_CHOICES %}
@@ -103,6 +111,7 @@
 
 {% block script %}
 	<script>
+		// DELETE CONFIRM POPUP
 		const delPopup = document.getElementById("delete-popup");
         const openDelPopupBtn = document.getElementById("delete-packakges");
         const closeDelPopupBtn = document.getElementById("close-delete-popup");
@@ -121,5 +130,13 @@
         closeDelPopupBtn.addEventListener("click", function() {
             delPopup.style.display = "none";
         });
+
+		// SORT EVENT
+		var sortSelect = document.getElementById("sort-select");
+
+		sortSelect.addEventListener("change", function() {
+			let selectedValue = this.value;
+			window.location.href = "{% url 'workspace:package_list' %}?order=" + selectedValue;
+		});
 	</script>
 {% endblock %}

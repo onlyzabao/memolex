@@ -27,7 +27,12 @@ class PackageListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        user = get_object_or_404(User, pk=self.request.user.id)
+        userID = self.request.GET.get("userID")
+        if userID:
+            user = get_object_or_404(User, pk=userID)
+        else:
+            user = get_object_or_404(User, pk=self.request.user.id)
+
         profile = get_object_or_404(Profile, user=user)
 
         context["meta"] = {
@@ -39,7 +44,19 @@ class PackageListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         base_qs = super(PackageListView, self).get_queryset()
-        return base_qs.filter(user=self.request.user)
+        
+        userID = self.request.GET.get("userID")
+        if userID:
+            base_qs = base_qs.filter(user__id=userID)
+            base_qs = base_qs.filter(privacy=True)
+        else:
+            base_qs = base_qs.filter(user=self.request.user)
+
+        order = self.request.GET.get("order")
+        if order == "date" or order == "level":
+            base_qs = base_qs.order_by(order)
+        
+        return base_qs
 
 
 class PackageDetailView(LoginRequiredMixin, DetailView):
@@ -47,9 +64,32 @@ class PackageDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "package"
     template_name = "workspace/package_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        userID = self.request.GET.get("userID")
+        if userID:
+            user = get_object_or_404(User, pk=userID)
+        else:
+            user = get_object_or_404(User, pk=self.request.user.id)
+
+        context["meta"] = {
+            "user": user
+        }
+
+        return context
+
     def get_queryset(self):
         base_qs = super(PackageDetailView, self).get_queryset()
-        return base_qs.filter(user=self.request.user)
+
+        userID = self.request.GET.get("userID")
+        if userID:
+            base_qs = base_qs.filter(user__id=userID)
+            base_qs = base_qs.filter(privacy=True)
+        else:
+            base_qs = base_qs.filter(user=self.request.user)
+
+        return base_qs
 
 
 class PackageCreateView(LoginRequiredMixin, View):
