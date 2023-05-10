@@ -1,0 +1,182 @@
+{% extends "dictionary_base.html" %}
+
+{% block title %}
+   Topic
+{% endblock %}
+
+{% block content %}
+    <div class="container text-center">
+        <h1>{{ topic.name }}</h1>
+        <h4>{{ topic.description }}</h4>
+        <br>
+        <div class="taskbar" style="width: 30%; ">
+            <i class="bi bi-three-dots-vertical"></i>
+                <button id="edit-list"><i class="bi bi-plus-circle" title="Add to Wordpack"></i> Add to Wordpack</button>
+            <i class="bi bi-three-dots-vertical"></i>
+        </div>
+        <br>
+        <!-- Popup -->
+        <div id="playlist-popup" class="popup">
+            <div class="popup-content">
+                <div class="popup-header">
+                    <h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Add to Wordpack</h3>
+                </div>
+                {% if packages %}
+                    <div class="playlist-list">
+                        <div class="playlist-container">
+                            {% for package in packages %}
+                                <label>
+                                <input type="checkbox" name="playlist" value="{{ package.id }}"> {{ package.name }}
+                                </label>
+                                <br>
+                            {% endfor %}
+                            {% comment %} <a href="{% url 'workspace:package_create' %}?word={{ word }}">
+                                Other
+                            </a> {% endcomment %}
+                        </div>
+                    </div>
+                    <div class="control-playlist">
+                        <button id="close-playlist">Cancel</button>
+                        <button id="save-playlist">Save</button>
+                    </div>
+                {% else %}
+                    <div class="playlist-blank">
+                        <p>You've not had any wordpack yet. Create a new one?</p>
+                    </div>
+                    <div class="control-playlist">
+                        <button id="close-playlist">Cancel</button>
+                        <button id="create-playlist">Create</button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <!-- chia các cột -->
+        <table class="table-fill">
+        <colgroup>
+            <col width="10" >
+            <col width="100" >
+        </colgroup>
+            
+        <thead> 
+            <tr>
+                <th class="text-center">Selection</th>
+                <th class="text-center">Word</th>
+            </tr>
+        </thead>
+
+        <tbody class="table-hover">
+            {% for word in topic.word_set.all %}
+                <tr>
+                    <td class="text-center" style="padding-left: 2px; padding-right: 2px; ">
+                        <input type="checkbox" name="words" value="{{ word.spelling }}" style="width: 20px; height: 20px; margin-right: 0px; ">
+                    </td>
+                    <td class="text-center" onclick="window.location='{% url "dictionary:word_detail" %}?word={{ word.spelling }}';" style="cursor: pointer;">
+                        {{ word.spelling }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block script %}
+    {% if user.is_authenticated %}
+        <script>
+            const openButton = document.getElementById("edit-list");
+            const closeButton = document.getElementById("close-playlist");
+            const popup = document.getElementById("playlist-popup");
+
+            openButton.addEventListener("click", function() {
+                popup.style.display = "block";
+            });
+
+            closeButton.addEventListener("click", function() {
+                popup.style.display = "none";
+            });
+        </script>
+        {% if packages %}
+            <script>
+                const packages = document.querySelectorAll('input[name="playlist"]');
+                const saveButton = document.getElementById("save-playlist");
+                saveButton.addEventListener("click", function() {
+                    const words = document.querySelectorAll('input[name="words"]:checked');
+                    const values = [];
+                    for (let i = 0; i < words.length; i++) {
+                        values.push(words[i].value);
+                    }
+                    const url = "{% url 'workspace:package_add_word' %}";
+                    const csrf_token = "{{ csrf_token }}";
+                    const data = {
+                        "word": values,
+                        "packages_id": []
+                    };
+                    
+                    packages.forEach(function(checkbox) {
+                        if (checkbox.checked) {
+                            data["packages_id"].push(checkbox.value)
+                        }
+                    });
+
+                    if (data["packages_id"].length == 0) {
+                        let message = document.createElement("div");
+                        message.classList.add("popup-message-error", "fade-in");
+                        message.innerText = "Please choose a wordpack.";
+                        document.body.appendChild(message);
+                        setTimeout(function() {
+                            message.remove();
+                        }, 2000);
+                    } else {
+                        fetch(url, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": csrf_token
+                            },
+                            body: JSON.stringify(data)
+                        }).then(response => {
+                            if (response.ok) {
+                                response.json().then(log => {
+                                    let message = document.createElement("div");
+                                    if (log.success) {
+                                        message.classList.add("popup-message-success", "fade-in");
+                                        message.innerText = "Success adding your word.";
+                                    } else {
+                                        message.classList.add("popup-message-error", "fade-in");
+                                        message.innerText = "Error adding your word.";
+                                    }
+                                    document.body.appendChild(message);
+                                    setTimeout(function() {
+                                        message.remove();
+                                    }, 2000);
+                                });
+                            } else {
+                                console.error("Error:", response.statusText);
+                            }
+                        }).catch(error => {
+                            console.error(error);
+                        });
+
+                        popup.style.display = "none";
+                    }
+                });
+            </script>
+        {% else %}
+            <script>
+                const createButton = document.getElementById("create-playlist");
+
+                createButton.addEventListener("click", function() {
+                    window.location.href = "{% url 'workspace:package_create' %}";
+                });
+            </script>
+        {% endif %}
+    {% else %}
+        <script>
+            const openButton = document.getElementById("edit-list");
+            openButton.addEventListener("click", function() {
+                sessionStorage.setItem("previousURL", window.location.href);
+                window.location.href = "{% url 'community:login' %}?next=" + encodeURIComponent(window.location.href);
+            });
+        </script>
+    {% endif %}
+{% endblock %}

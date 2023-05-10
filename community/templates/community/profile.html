@@ -8,11 +8,13 @@
             <br>
             {% if user.profile %}
                 <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="avatar" style="border-radius: 5%;width: 90%; display: block; margin: 0 auto;" accept=".jpg,.jpeg,.png"/>
-
+                {% comment %} <label for="avatar">Avatar:</label> {% endcomment %}
+                <div style="text-align: center; margin-top: 20px; margin-left: 80px; ">
+                    <input type="file" name="avatar" id="avatar">
+                </div>
             {% endif %}
             
             <p class="sign" align="center" style="padding-top: 10px;">{{ user.username | title }}</p>
-            <p class="text-center" style="padding-bottom: 30px;"><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             
                 <label for="first name">First Name:</label>
                 <input type="first name" id="first_name" name="first name" value="{{ user.first_name }}" />
@@ -25,13 +27,6 @@
 
                 <label for="bio">Bio:</label>
                 <textarea id="bio" name="bio" style="height: 150px;">{{ user.profile.bio }}</textarea>
-
-                
-                <label for="avatar">Avatar:</label>
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <input type="file" name="avatar" id="avatar">
-                </div>
-                      
             
             <button type="submit" class="submit" style="margin-left: 105px;">Update Profile</button>
             <a href="{% url 'home' %}" style="padding-top: 20px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; width: 100%;">Back to home</a>

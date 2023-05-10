@@ -13,6 +13,19 @@ class TopicListView(ListView):
     context_object_name = "topics"
     template_name = "dictionary/topic_list.html"
 
+class TopicDetailView(DetailView):
+    model = Topic
+    context_object_name = "topic"
+    template_name = "dictionary/topic_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+                context["packages"] = Package.objects.filter(user=self.request.user)
+
+        return context
+
 class WordDetailView(View):
     def get(self, request):
         word = request.GET.get("word")

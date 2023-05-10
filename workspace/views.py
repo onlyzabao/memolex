@@ -211,14 +211,14 @@ class AddWordView(LoginRequiredMixin, View):
         status = False
         data = json.loads(request.body)
 
-        if "packages_id" in data and "word" in data: 
-            spelling = data["word"]
-            for package_id in data["packages_id"]:
-                duplicated_word = Word.objects.filter(package__id=package_id, spelling=spelling)
-                if not duplicated_word.exists():
-                    package = Package.objects.get(pk=package_id)
-                    word = Word(package=package, spelling=spelling)
-                    word.save()
+        if "packages_id" in data and "word" in data:
+            for word in data["word"]: 
+                for package_id in data["packages_id"]:
+                    duplicated_word = Word.objects.filter(package__id=package_id, spelling=word)
+                    if not duplicated_word.exists():
+                        package = Package.objects.get(pk=package_id)
+                        word = Word(package=package, spelling=word)
+                        word.save()
             status = True
     
     

@@ -10,11 +10,11 @@
 	<div class="wrapper">
 		<div class = "word text-center">
 			{% if results %}
-			<!--Popup-Start-->
 			<h1> 
 				{{ word }}
 				<button id="open-playlist" class="btn" style="font-size:24px"><i class="bi bi-plus-circle-fill"></i></button>
 			</h1>
+			<!--Popup-Start-->
 			<div id="playlist-popup" class="popup">
 				<div class="popup-content">
 					<div class="popup-header">
@@ -142,7 +142,7 @@
 					const url = "{% url 'workspace:package_add_word' %}";
 					const csrf_token = "{{ csrf_token }}";
 					const data = {
-						"word": "{{ word }}",
+						"word": ["{{ word }}"],
 						"packages_id": []
 					};
 					
