@@ -241,7 +241,7 @@ class PackageReviewView(LoginRequiredMixin, View):
 
         return render(request, "workspace/review_test.html", context)
     
-    def post(seft, request, level, pk):
+    def check(request, level, pk):
         questions = request.POST.getlist("questions")
         keys = request.POST.getlist("keys")
         coeffs = request.POST.getlist("coeffs")
@@ -269,16 +269,22 @@ class PackageReviewView(LoginRequiredMixin, View):
                     word.progress = 100
                 word.save()
 
-        words = Word.objects.filter(package__id=pk)
-        if words.exclude(progress=100).count() == 0:
-            package = Package.objects.get(id=pk)
-            if package.level < 3:
-                package.level += 1
-                package.save()
-            
-            words.update(progress=0)
+        score = math.ceil((mark / testLen) * 100)
+
+        return score, mark, list(zip(questions, keys, answers, results))
+    
+    def update(user, pk, score):
+        package = Package.objects.get(id=pk)
+        package.update_level()
         
-        test = list(zip(questions, keys, answers, results))
+        profile = Profile.objects.get(user__id=user.id)
+        profile.update_streak(tested=True)
+        profile.update_score(score)
+        return
+    
+    def post(seft, request, level, pk):
+        score, mark, test = PackageReviewView.check(request, level, pk)
+        PackageReviewView.update(user=request.user, pk=pk, score=score)
 
         context = {
             "meta": {

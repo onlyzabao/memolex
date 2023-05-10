@@ -33,6 +33,15 @@ class Package(models.Model):
     
     def total_words(self):
         return self.word_set.count()
+    
+    def update_level(self):
+        words = Word.objects.filter(package__id=self.pk)
+        if words.exclude(progress=100).count() == 0:
+            if self.level < 3:
+                self.level += 1
+                self.save()
+            
+            words.update(progress=0)
 
 class Word(models.Model):
     # Foreign Key
