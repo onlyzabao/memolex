@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.db.models import Q
 from django.views import View
 from django.views.generic import TemplateView
 from workspace.models import Package
@@ -27,7 +26,7 @@ class WordDetailView(View):
                 context = {"word": word, "suggestions": suggestions}
 
             if request.user.is_authenticated:
-                context["packages"] = Package.objects.filter(Q(user=request.user) & Q(level=0))
+                context["packages"] = Package.objects.filter(user=request.user)
             
             return render(request, "dictionary/word_detail.html", context)
 

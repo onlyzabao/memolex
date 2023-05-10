@@ -183,7 +183,6 @@ class PackageReviewView(LoginRequiredMixin, View):
         return render(request, "workspace/review_test.html", context)
     
     def post(seft, request, level, pk):
-        print(request.POST)
         questions = request.POST.getlist("questions")
         keys = request.POST.getlist("keys")
         coeffs = request.POST.getlist("coeffs")
