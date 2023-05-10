@@ -1,17 +1,19 @@
-from django.db.models import Q
+from random import shuffle
 from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import inlineformset_factory
 from django.http import JsonResponse, HttpResponse
+from django.db.models import Q
+from community.models import Profile
 from .models import Package, Word
 from .forms import PackageForm, WordForm, WordInlineFormSet
 from .utilities import Test
-from random import shuffle
 import json
 import math
 
@@ -21,6 +23,19 @@ class PackageListView(LoginRequiredMixin, ListView):
     model = Package
     context_object_name = "packages"
     template_name = "workspace/package_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = get_object_or_404(User, pk=self.request.user.id)
+        profile = get_object_or_404(Profile, user=user)
+
+        context["meta"] = {
+            "user": user,
+            "profile": profile
+        }
+
+        return context
 
     def get_queryset(self):
         base_qs = super(PackageListView, self).get_queryset()
@@ -137,12 +152,15 @@ class PackageUpdateView(LoginRequiredMixin, View):
             return render(request, "workspace/package_form.html", context)
     
 class PackageDeleteView(LoginRequiredMixin, View):
-    def get(self, request, pk):
-        package = get_object_or_404(Package, pk=pk)
-        words = Word.objects.filter(package=package)
+    def post(self, request):
+        pkList = request.POST.getlist("pk")
 
-        words.delete()
-        package.delete()
+        for pk in pkList: 
+            package = get_object_or_404(Package, pk=pk)
+            words = Word.objects.filter(package=package)
+
+            words.delete()
+            package.delete()
 
         messages.success(request, "Your package was deleted successfully.")
         return redirect(reverse_lazy("workspace:package_list"))

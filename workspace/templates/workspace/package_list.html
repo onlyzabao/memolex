@@ -4,12 +4,61 @@
 	My Wordpack
 {% endblock %}
 
+{% block subcontent %}
+	<div class="wrapper">
+		<div class="user_streak">
+			<div class="ava"><img src="{{ meta.profile.avatar.url }}"></div>
+			<div class="infor">
+				<h1 style="padding-top: 10px;">{{ meta.user|title }}</h1>
+				{% if meta.profile.bio %}
+					<p style="font-style: italic; margin-left: 0px; margin-bottom: 10px;">{{ meta.profile.bio }}</p>
+				{% endif %}
+				<div class="award" style="display: flex;"> 
+					<h5><i class="bi bi-fire"></i> Streak: {{ meta.profile.streak }}</h5>
+					<h5 style="margin-left: 100px;"> <i class="bi bi-rocket-fill"></i> Score: {{ meta.profile.score }}</h5>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
 {% block content %}
+	<!--DeletePopup-Start-->
+	<div id="delete-popup" class="popup">
+		<div class="popup-content">
+			<div class="popup-header">
+				<h3 style="font-weight: bold; display: inline-block; margin: 0 auto;">Delete Wordpack</h3>
+			</div>
+			<div class="text-center">
+				<p>Are you sure that you want to delete selected wordpacks?</p>
+			</div>
+			<div class="control-playlist">
+				<form id="package-delete-form" method="POST" action="{% url 'workspace:package_delete' %}">
+					{% csrf_token %}
+					<input type="hidden" name="pk" value={{ package.pk }}>
+					<button type="button" id="close-delete-popup">Cancel</button>
+					<button type="submit" id="confirm-delete-popup">Delete</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!--DeletePopup-End-->
 	<div class="container text-center">
-		<h1 style="text-align: center; margin-bottom: 20px;">My Wordpack</h1>
-		<form method="GET" action="{% url 'workspace:package_create' %}">
-			<button type="submit" id="create-new-list">Create Wordpack</button>
-		</form>
+		<div class="taskbar">
+			<i class="bi bi-three-dots-vertical"></i>
+				<form method="GET" action="{% url 'workspace:package_create' %}">
+					<button class="create-btn" type="submit">Create new pack</button>
+				</form>
+			<i class="bi bi-three-dots-vertical"></i>
+				<button type="submit" class="delete-btn" id="delete-packakges">Delete selected packs</button>
+			<i class="bi bi-three-dots-vertical"></i>
+				<select class="sort-mode">
+					<option value="" disabled selected>Sort packs</option>
+					<option value="created_date">Date</option>
+					<option value="rating">Rating</option>
+				</select>
+			<i class="bi bi-three-dots-vertical"></i>
+		</div>
 		<br>
 		<!--Blocks of lists-->
 		<section id="lists" class="topics pt-0">
@@ -19,7 +68,7 @@
 						<div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
 							<div class="card">
 								<div class="select">
-									<input type="checkbox" name="package" value="{{ package.id }}" style="width: 15px; height: 15px; margin-right: 0px;">
+									<input form="package-delete-form" type="checkbox" name="pk" value="{{ package.id }}" style="width: 20px; height: 20px; margin-right: 0px;">
 								</div>
 								<h3><a href="{% url 'workspace:package_detail' package.pk %}" class="stretched-link">{{ package.name }}</a></h3>
 								<h6>{{ package.description }}</h6>
@@ -54,5 +103,27 @@
 {% endblock %}
 
 {% block script %}
+	<script>
+		const delPopup = document.getElementById("delete-popup");
+        const openDelPopupBtn = document.getElementById("delete-packakges");
+        const closeDelPopupBtn = document.getElementById("close-delete-popup");
 
+		const myForm = document.getElementById("package-delete-form");
+
+        openDelPopupBtn.addEventListener("click", function() {
+			const checkedItems = myForm.querySelectorAll('input[name="item"]:checked');
+			const numCheckedItems = checkedItems.length;
+			
+			if (numCheckedItems === 0) {
+				alert('Please select at least one wordpack.');
+			} else {
+				delPopup.style.display = "block";
+			}
+
+        });
+
+        closeDelPopupBtn.addEventListener("click", function() {
+            delPopup.style.display = "none";
+        });
+	</script>
 {% endblock %}

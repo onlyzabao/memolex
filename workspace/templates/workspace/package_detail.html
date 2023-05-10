@@ -47,8 +47,12 @@
                 <p>Are you sure that you want to delete "{{ package }}"?</p>
             </div>
             <div class="control-playlist">
-                <button id="close-delete-popup">Cancel</button>
-                <button id="confirm-delete-popup">Delete</button>
+                <form id="package-delete-form" method="POST" action="{% url 'workspace:package_delete' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="pk" value={{ package.pk }}>
+                    <button type="button" id="close-delete-popup">Cancel</button>
+                    <button type="submit" id="confirm-delete-popup">Delete</button>
+                </form>
             </div>
         </div>
     </div>
@@ -145,7 +149,6 @@
         const delPopup = document.getElementById("delete-popup");
         const openDelPopupBtn = document.getElementById("delete-list");
         const closeDelPopupBtn = document.getElementById("close-delete-popup");
-        const delBtn = document.getElementById("confirm-delete-popup");
 
         openDelPopupBtn.addEventListener("click", function() {
             delPopup.style.display = "block";
@@ -153,10 +156,6 @@
 
         closeDelPopupBtn.addEventListener("click", function() {
             delPopup.style.display = "none";
-        });
-
-        delBtn.addEventListener("click", function() {
-            window.location="{% url 'workspace:package_delete' package.pk %}"
         });
     </script>
 {% endblock %}

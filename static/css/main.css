@@ -893,7 +893,7 @@ section {
 .listword {
   background-color: #374785;
   background-image: url("../img/word.png");
-  padding-top: 120px;
+  padding-top: 0px;
   padding-bottom: 60px;
 }
 
@@ -1041,7 +1041,7 @@ td.text-right {
 .word-detail {
   background-color: #374785;
   background-image: url("../img/word.png");
-  padding-top: 150px;
+  padding-top: 120px;
   padding-bottom: 60px;
 }
 
@@ -1900,6 +1900,109 @@ input[type="checkbox"] {
   color: #374785;
 }
 
+/*--------------------------------------------------------------
+# MYLIST TASKBAR
+--------------------------------------------------------------*/
+.taskbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  width: 70%;
+  border-radius: 10px;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.bi-three-dots-vertical {
+  opacity: 60%;
+}
+
+.public-private, .date-picker, .sort-mode, .create-btn, .delete-btn {
+  /* margin-right: 10px; */
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+}
+
+.public-private:hover, .date-picker:hover, .sort-mode:hover, .create-btn:hover, .delete-btn:hover {
+  scale: 1.1;
+  font-weight: 600;
+}
+
+.public-private:focus, .date-picker:focus, .sort-mode:focus, .create-btn:active, .delete-btn:focus {
+  scale: 1.1;
+  font-weight: 600;
+}
 
 
+/*--------------------------------------------------------------
+# COMMUNITY
+--------------------------------------------------------------*/
+.user_streak {
+  margin-left: 50px;
+  margin-right: 50px;
+  display: flex;
+  align-items: center;
+}
+.ava img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+.infor {
+  margin-left:50px;
+  margin-right:50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
+.infor h5 {
+  font-size: 20px;
+}
+
+.infor p {
+  font-size: 20px;
+}
+
+.infor .bi-award-fill {
+  color: #f7d02c;
+  padding-bottom: 10px;
+}
+
+.infor .bi-rocket-fill {
+  color: #24305e;
+  padding-bottom: 10px;
+}
+
+.infor .bi-fire {
+  color: #f76c6c
+}
+
+.public_wordpack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+.public_wordpack .card{
+  text-align: center;
+  margin-bottom: 30px;
+  margin-left: 10px;
+  margin-right:10px;
+  padding: 10px;
+}
+
+.public_wordpack .card:hover {
+  scale: 1.05;
+  border: 2px solid rgba(127, 137, 161, 0.5)
+}
