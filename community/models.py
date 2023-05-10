@@ -10,7 +10,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     # Identity
     avatar = models.ImageField(default="avatar.jpg", upload_to="profile_avatars")
-    bio = models.TextField(blank=True)
+    bio = models.TextField(default="Hi, I'm a new member of MemoLex community!", blank=True)
     # Attribute
     score = models.IntegerField(default=0)
     streak = models.SmallIntegerField(default=0)
@@ -50,5 +50,5 @@ class Profile(models.Model):
         self.save()
     
     def update_score(self, score):
-        self.score += score + self.streak * 10
+        self.score += score + self.streak
         self.save()

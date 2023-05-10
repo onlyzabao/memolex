@@ -1,0 +1,42 @@
+{% extends "community_base.html" %}
+
+{% block title %}
+    Ranking
+{% endblock %}
+
+{% block content %}
+    <h1 style="text-align: center; margin-bottom: 50px;">Ranking Table</h1>
+    <div class="word-infor" id="word-infor">
+        <table class="table-fill" style="margin-bottom: 30px; width: 75%;">
+            <colgroup>
+                <col width="100" >
+                <col width="400" >
+                <col width="100" >
+            </colgroup>
+                
+            <thead> 
+                <tr>
+                <th class="text-center"><i class="bi bi-award-fill" style="color: #f7d02c;"></i></th>
+                <th class="text-center">User</th>
+                <th class="text-center">Score</th>
+                </tr>
+            </thead>
+            
+            <tbody class="table-hover">
+                {% for user in users %}
+                    <tr onclick="location.href='{% url "workspace:package_list" %}?userID={{ user.id }}';">
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td class="text-left">
+                            <p><img src="{{ user.profile.avatar.url }}" style="width:30px; height:30px; margin-right:10px;"> {{ user|title }}</p>
+                        </td>
+                        <td class="text-center">{{ user.profile.score }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

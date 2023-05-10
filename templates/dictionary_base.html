@@ -57,7 +57,7 @@
                     <li><a href="{% url 'home' %}" class="active">Home</a></li>
                     <li><a href="{% url 'dictionary:topic_list' %}" class="active">Dictionary</a></li>
                     <li><a href="{% url 'workspace:package_list' %}" class="active">Workspace</a></li>
-                    <li><a href="{% url 'community:index' %}" class="active">Community</a></li>
+                    <li><a href="{% url 'community:user_list' %}" class="active">Community</a></li>
                     <!-- After login -->
                     {% if request.user.is_authenticated %}
                         <li class="nav-item dropdown">

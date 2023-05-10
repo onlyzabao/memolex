@@ -7,11 +7,11 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView,
     PasswordResetCompleteView,
 )
-from .views import IndexView, MemoLexLoginView, MemoLexSignupView, MemoLexProfileView
+from .views import UserListView, MemoLexLoginView, MemoLexSignupView, MemoLexProfileView
 
 app_name = "community"
 urlpatterns = [
-    path("", IndexView.as_view(), name="index"),
+    path("", UserListView.as_view(), name="user_list"),
     path("login/", MemoLexLoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(next_page="home"), name="logout"),
     path("signup/", MemoLexSignupView.as_view(), name="signup"),

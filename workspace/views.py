@@ -269,7 +269,7 @@ class PackageReviewView(LoginRequiredMixin, View):
                     word.progress = 100
                 word.save()
 
-        score = math.ceil((mark / testLen) * 100)
+        score = math.ceil((mark / testLen) * 10)
 
         return score, mark, list(zip(questions, keys, answers, results))
     
