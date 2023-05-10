@@ -35,7 +35,6 @@
 			<div class="control-playlist">
 				<form id="package-delete-form" method="POST" action="{% url 'workspace:package_delete' %}">
 					{% csrf_token %}
-					<input type="hidden" name="pk" value={{ package.pk }}>
 					<button type="button" id="close-delete-popup">Cancel</button>
 					<button type="submit" id="confirm-delete-popup">Delete</button>
 				</form>
@@ -108,10 +107,8 @@
         const openDelPopupBtn = document.getElementById("delete-packakges");
         const closeDelPopupBtn = document.getElementById("close-delete-popup");
 
-		const myForm = document.getElementById("package-delete-form");
-
         openDelPopupBtn.addEventListener("click", function() {
-			const checkedItems = myForm.querySelectorAll('input[name="item"]:checked');
+			const checkedItems = document.querySelectorAll('input[name="pk"]:checked');
 			const numCheckedItems = checkedItems.length;
 			
 			if (numCheckedItems === 0) {
@@ -119,7 +116,6 @@
 			} else {
 				delPopup.style.display = "block";
 			}
-
         });
 
         closeDelPopupBtn.addEventListener("click", function() {

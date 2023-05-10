@@ -154,6 +154,7 @@ class PackageUpdateView(LoginRequiredMixin, View):
 class PackageDeleteView(LoginRequiredMixin, View):
     def post(self, request):
         pkList = request.POST.getlist("pk")
+        print(pkList)
 
         for pk in pkList: 
             package = get_object_or_404(Package, pk=pk)
