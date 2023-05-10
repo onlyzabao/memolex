@@ -1,10 +1,10 @@
 {% extends "dictionary_base.html" %}
 
-{% load static %}
+{% block title %}
+   Topic
+{% endblock %}
 
 {% block content %}
-<!-- ======= Breadcrumbs ======= -->
-<section id="listword" class="listword">
    <div class="container text-center">
       <h1>Topics</h1>
       <h4>Build your topic vocabulary with these mini-dictionaries, which are groups of words related to common subject areas. Choose a topic area from the list below to get started.</h4>
@@ -12,71 +12,20 @@
       <section id="topcs" class="topics pt-0">
          <div class="container" data-aos="fade-up">
             <div class="row gy-4">
-               <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
-                  <div class="card">
-                     <div class="card-img">
-                        <img src="{% static 'img/greetings.jpg' %}" alt="" class="img-fluid">
+               {% for topic in topics %}
+                  <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                     <div class="card">
+                        <div class="card-img">
+                           <img src="{{ topic.wallpaper.url }}" alt="" class="img-fluid">
+                        </div>
+                        <h3><a href="#" class="stretched-link">{{ topic.name }}</a></h3>
+                        <p>{{ topic.description }}</p>
                      </div>
-                     <h3><a href="topic.html" class="stretched-link">Greetings</a></h3>
-                     <p>Greetings are extremely important in English communication.</p>
                   </div>
-               </div>
-               <!-- End Card Item -->
-               <div class="col-lg-3" data-aos="fade-up" data-aos-delay="200">
-                  <div class="card">
-                     <div class="card-img">
-                        <img src="{% static 'img/relationships.jpg' %}" alt="" class="img-fluid">
-                     </div>
-                     <h3><a href="topic.html" class="stretched-link">Relationships</a></h3>
-                     <p>We need to know how to address and communicate with relationships appropriately and accurately.</p>
-                  </div>
-               </div>
-               <!-- End Card Item -->
-               <div class="col-lg-3" data-aos="fade-up" data-aos-delay="300">
-                  <div class="card">
-                     <div class="card-img">
-                        <img src="{% static 'img/human.jpg' %}" alt="" class="img-fluid">
-                     </div>
-                     <h3><a href="topic.html" class="stretched-link">Human</a></h3>
-                     <p>Learning to describe people will help you use it in many situations and contexts.</p>
-                  </div>
-               </div>
-               <!-- End Card Item -->
-               <div class="col-lg-3" data-aos="fade-up" data-aos-delay="400">
-                  <div class="card">
-                     <div class="card-img">
-                        <img src="{% static 'img/direction.jpg' %}" alt="" class="img-fluid">
-                     </div>
-                     <h3><a href="topic.html" class="stretched-link">Direction</a></h3>
-                     <p>The topic is very important for those who want to learn English for travel purposes.</p>
-                  </div>
-               </div>
-               <!-- End Card Item -->
-               <div class="col-lg-3" data-aos="fade-up" data-aos-delay="500">
-                  <div class="card">
-                     <div class="card-img">
-                        <img src="{% static 'img/food.jpg' %}" alt="" class="img-fluid">
-                     </div>
-                     <h3><a href="topic.html" class="stretched-link">Food</a></h3>
-                     <p>In this topic, you need to learn how to name some basic dishes in English</p>
-                  </div>
-               </div>
-               <!-- End Card Item -->
-               <div class="col-lg-3" data-aos="fade-up" data-aos-delay="600">
-                  <div class="card">
-                     <div class="card-img">
-                        <img src="{% static 'img/shopping.jpg' %}" alt="" class="img-fluid">
-                     </div>
-                     <h3><a href="topic.html" class="stretched-link">Shopping</a></h3>
-                     <p>Shopping is also a topic that needs to be invested in.</p>
-                  </div>
-               </div>
-               <!-- End Card Item -->
+               {% endfor %}
             </div>
          </div>
       </section>
       <!-- End Topics Section -->
    </div>
-</section>
-<!-- End Breadcrumbs -->
 {% endblock %}

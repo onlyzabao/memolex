@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from workspace.models import Package
 from .api import WordsAPI
+from .models import Topic, Word
 import enchant
 
 # Create your views here.
-class TopicListView(TemplateView):
+class TopicListView(ListView):
+    model = Topic
+    context_object_name = "topics"
     template_name = "dictionary/topic_list.html"
-
 
 class WordDetailView(View):
     def get(self, request):

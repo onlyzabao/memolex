@@ -80,8 +80,15 @@
     </header><!-- End Header -->
 
     <main id="main">
-        {% block content %}
-        {% endblock %}
+        <section id="word-detail" class="word-detail">
+            {% block subcontent %}
+            {% endblock %}
+        </section>
+
+        <section id="listword" class="listword">
+            {% block content %}
+            {% endblock %}
+        </section>
     </main>
 
     <!-- ======= Footer ======= -->
