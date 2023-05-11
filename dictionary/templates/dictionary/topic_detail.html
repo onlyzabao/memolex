@@ -30,9 +30,9 @@
                                 </label>
                                 <br>
                             {% endfor %}
-                            <a href="{% url 'workspace:package_create' %}?word={{ word }}">
+                            {% comment %} <a href="{% url 'workspace:package_create' %}?word={{ word }}">
                                 Other
-                            </a>
+                            </a> {% endcomment %}
                         </div>
                     </div>
                     <div class="control-playlist">

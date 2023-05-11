@@ -1,0 +1,10 @@
+<p>Hi, {{ user.username }}</p>
+
+<p>You're receiving this email because you have a wordpack to study.</p>
+
+<p>Please click the following link to study:</p>
+
+https://127.0.0.1:8000{% url "workspace:package_detail" package.pk %}
+
+<p>Thanks</p>
+<p>MemoLex Team</p>
