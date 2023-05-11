@@ -13,7 +13,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import SignupForm, UserUpdateForm, ProfileUpdateForm
 from .models import Profile
 
-
 # Create your views here.
 class MemoLexLoginView(LoginView):
     template_name = "community/login.html"

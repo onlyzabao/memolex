@@ -8,8 +8,8 @@
     <div class="container text-center">
         <h1>{{ topic.name }}</h1>
         <h4>{{ topic.description }}</h4>
-        <br>
-        <div class="taskbar" style="width: 30%; ">
+
+        <div class="taskbar" style="width: 30%;">
             <i class="bi bi-three-dots-vertical"></i>
                 <button id="edit-list"><i class="bi bi-plus-circle" title="Add to Wordpack"></i> Add to Wordpack</button>
             <i class="bi bi-three-dots-vertical"></i>
@@ -30,9 +30,9 @@
                                 </label>
                                 <br>
                             {% endfor %}
-                            {% comment %} <a href="{% url 'workspace:package_create' %}?word={{ word }}">
+                            <a href="{% url 'workspace:package_create' %}?word={{ word }}">
                                 Other
-                            </a> {% endcomment %}
+                            </a>
                         </div>
                     </div>
                     <div class="control-playlist">
@@ -51,10 +51,10 @@
             </div>
         </div>
         <!-- chia các cột -->
-        <table class="table-fill">
+        <table class="table-fill" style="width:50%;">
         <colgroup>
             <col width="10" >
-            <col width="100" >
+            <col width="500" >
         </colgroup>
             
         <thead> 

@@ -26,7 +26,7 @@
             <tbody class="table-hover">
                 {% for user in users %}
                     <tr onclick="location.href='{% url "workspace:package_list" %}?userID={{ user.id }}';">
-                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td class="text-center"{% if forloop.counter == 1 %} style="font-size: 25px; font-weight: bold; color: #f76c6c"{% elif forloop.counter == 2 %} style="font-weight: bold;"{% endif %}>{{ forloop.counter }}</td>
                         <td class="text-left">
                             <p><img src="{{ user.profile.avatar.url }}" style="width:30px; height:30px; margin-right:10px;"> {{ user|title }}</p>
                         </td>

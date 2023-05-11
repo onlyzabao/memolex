@@ -6,7 +6,7 @@
 
 {% block subcontent %}
 	<div class="wrapper">
-		<div class="user_streak">
+		<div class="user_streak" style="padding-top: 10px; padding-bottom: 10px;">
 			<div class="ava"><img src="{{ meta.profile.avatar.url }}"></div>
 			<div class="infor">
 				<h1 style="padding-top: 10px;">{{ meta.user|title }}</h1>
@@ -44,7 +44,7 @@
 	<!--DeletePopup-End-->
 	<div class="container text-center">
 		{% if request.user == meta.user %}
-			<div class="taskbar">
+			<div class="taskbar" style="margin-bottom: 60px; margin-top: 20px;">
 				<i class="bi bi-three-dots-vertical"></i>
 					<form method="GET" action="{% url 'workspace:package_create' %}">
 						<button class="create-btn" type="submit">Create new pack</button>
@@ -60,7 +60,7 @@
 				<i class="bi bi-three-dots-vertical"></i>
 			</div>
 		{% endif %}
-		<br>
+		
 		<!--Blocks of lists-->
 		<section id="lists" class="topics pt-0" style="margin-top: 0px; ">
 			<div class="container" data-aos="fade-up">

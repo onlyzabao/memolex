@@ -36,9 +36,9 @@
             <nav id="navbar" class="navbar">
                <ul>
                   <li><a href="{% url 'home' %}" class="active">Home</a></li>
-                  <li><a href="{% url 'dictionary:topic_list' %}" class="active">Dictionary</a></li>
-                  <li><a href="{% url 'workspace:package_list' %}" class="active">Workspace</a></li>
-                  <li><a href="{% url 'community:user_list' %}" class="active">Community</a></li>
+                  <li><a href="{% url 'dictionary:topic_list' %}" class="active">Packages</a></li>
+                  <li><a href="{% url 'workspace:package_list' %}" class="active">My packs</a></li>
+                  <li><a href="{% url 'community:user_list' %}" class="active">Rankings</a></li>
                   {% if request.user.is_authenticated %}
                      <li class="nav-item dropdown">
                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -140,7 +140,7 @@
                      <div>
                         <h4 class="title">Review vocabulary</h4>
                         <p class="description">The most effective way to improve your vocabulary retention, increase your ability to use new words, and reduce the likelihood of forgetting them is to practice and use the words regularly</p>
-                        <a href="dictionary/index.html" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+                        <a href="{% url 'workspace:package_list' %}" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
                      </div>
                   </div>
                   <!-- End Service Item -->
@@ -155,7 +155,7 @@
                   <div class="col-lg-8 text-center">
                      <h3>Review now</h3>
                      <p> So why hesitate any longer without reviewing the words you've learned with MemoLex?</p>
-                     <a class="cta-btn" href="login.html">Review</a>
+                     <a class="cta-btn" href="{% url 'workspace:package_list' %}">Review</a>
                   </div>
                </div>
             </div>

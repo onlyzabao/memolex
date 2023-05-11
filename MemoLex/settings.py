@@ -158,3 +158,8 @@ LOGIN_URL = 'community:login'
 LOGIN_REDIRECT_URL = 'home'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'memolex.remind@gmail.com' # Email của bạn
+EMAIL_HOST_PASSWORD = 'memolex2023' # Mật khẩu email của bạn
