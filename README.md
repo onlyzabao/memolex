@@ -1,2 +1,2 @@
 # MemoLex
-[UET] Software Engineering Project
+[UET] Software Engineering Project - A dictionary website.
